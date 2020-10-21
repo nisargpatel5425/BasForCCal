@@ -1,6 +1,6 @@
 // $ANTLR null /Users/suhas/Ashwini/CSULB Subjects/sem2/APL/Assignments/BasForCCal/src/basForCCal/BasForCCal.g 2020-10-09 16:46:23
 
-package basForCCal;
+package BasForCCal;
 
 
 import org.antlr.runtime.*;
