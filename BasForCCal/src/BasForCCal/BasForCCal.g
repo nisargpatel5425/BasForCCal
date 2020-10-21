@@ -1,14 +1,14 @@
 grammar BasForCCal;
 options {backtrack=true; memoize=true;}
 @header{
-package basForCCal;
+package BasForCCal;
 }
 @members{
 boolean isExtends=false, isImp=false;
 int intCount=0;
 }
 @lexer::header{
-package basForCCal;
+package BasForCCal;
 }
 @lexer::members {
   protected boolean enumIsKeyword = true;
@@ -49,9 +49,9 @@ classOrInterfaceModifiers
 
 classOrInterfaceModifier
     :   annotation   // class or interface
-    |   'public'     {System.out.println("found public");}// class or interface
-    |   'protected'   {System.out.println("found protected");}// class or interface
-    |   'private'     {System.out.println("found private");}// class or interface
+    |   'public'     //{System.out.println("found public");}// class or interface
+    |   'protected'   //{System.out.println("found protected");}// class or interface
+    |   'private'    // {System.out.println("found private");}// class or interface
     |   'abstract'   // class or interface
     |   'static'     // class or interface
     |   'final'      // class only -- does not apply to interfaces
@@ -136,8 +136,8 @@ classBodyDeclaration
 memberDecl
     :   genericMethodOrConstructorDecl
     |   memberDeclaration
-    |   'void' Identifier voidMethodDeclaratorRest
-    |   Identifier constructorDeclaratorRest
+    |   'void' Identifier {System.out.println("  "+$Identifier.text);} voidMethodDeclaratorRest
+    |   Identifier {System.out.println("  "+$Identifier.text);} constructorDeclaratorRest
     |   interfaceDeclaration
     |   classDeclaration
     ;
@@ -156,7 +156,7 @@ genericMethodOrConstructorRest
     ;
 
 methodDeclaration
-    :   Identifier methodDeclaratorRest
+    :   Identifier {System.out.println("  "+$Identifier.text);} methodDeclaratorRest
     ;
 
 fieldDeclaration
@@ -284,14 +284,15 @@ type
 
 classOrInterfaceType
 	:	I1=Identifier {if(isExtends){ 
-	                          System.out.println("extends "+$I1.text); isExtends=false;} 
+	                          System.out.println("Ancestor classes:  "+$I1.text); isExtends=false;} 
 	                       else 
 	                       if(isImp){
 	                       	  System.out.println("implements "+$I1.text); isExtends=false;
 	                       	  isImp=false;
 	                       } 
-	                       else
-	                       System.out.println("Found type " + $I1.text);}
+	                       //else
+	                       //System.out.println("Found type " + $I1.text);
+	                       }
 	         typeArguments? ('.' Identifier typeArguments? )*
 	;
 
@@ -300,7 +301,7 @@ primitiveType
     |   'char'
     |   'byte'
     |   'short'
-    |   'int' {System.out.println("Found int"); intCount++;}
+    |   'int'// {System.out.println("Found int"); intCount++;}
     |   'long'
     |   'float'
     |   'double'
