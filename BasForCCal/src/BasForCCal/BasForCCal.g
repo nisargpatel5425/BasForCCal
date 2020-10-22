@@ -71,7 +71,8 @@ normalClassDeclaration
     :   'class' Identifier {System.out.println("Class:"+$Identifier.text);} typeParameters?
         ('extends'{isExtends=true;} type)?
         ('implements'{isImp= true;} typeList)?
-        classBody
+         {System.out.println(" Data Members: ");}classBody
+       
     ;
     
 typeParameters
@@ -120,7 +121,7 @@ typeList
     ;
     
 classBody
-    :   '{' classBodyDeclaration* '}'
+    :   '{' classBodyDeclaration* '}' 
     ;
     
 interfaceBody
@@ -128,16 +129,16 @@ interfaceBody
     ;
 
 classBodyDeclaration
-    :   ';'
+    :   ';'  
     |   'static'? block
-    |   modifiers memberDecl
+    |    modifiers memberDecl
     ;
     
-memberDecl
+memberDecl 
     :   genericMethodOrConstructorDecl
     |   memberDeclaration
-    |   'void' Identifier {System.out.println("  "+$Identifier.text);} voidMethodDeclaratorRest
-    |   Identifier {System.out.println("  "+$Identifier.text);} constructorDeclaratorRest
+    |   'void' Identifier {System.out.print("void "+$Identifier.text);} voidMethodDeclaratorRest
+    |   Identifier {System.out.print($Identifier.text);} constructorDeclaratorRest
     |   interfaceDeclaration
     |   classDeclaration
     ;
@@ -156,7 +157,7 @@ genericMethodOrConstructorRest
     ;
 
 methodDeclaration
-    :   Identifier {System.out.println("  "+$Identifier.text);} methodDeclaratorRest
+    :   Identifier {System.out.print($Identifier.text);} methodDeclaratorRest
     ;
 
 fieldDeclaration
@@ -218,15 +219,15 @@ constructorDeclaratorRest
     ;
 
 constantDeclarator
-    :   Identifier constantDeclaratorRest
+    :   Identifier constantDeclaratorRest 
     ;
     
 variableDeclarators
-    :   variableDeclarator (',' variableDeclarator)*
+    :   variableDeclarator (',' {System.out.print(",");} variableDeclarator)* 
     ;
 
 variableDeclarator
-    :   variableDeclaratorId ('=' variableInitializer)?
+    :   Identifier variableDeclaratorId  {System.out.println($Identifier.text);}('=' variableInitializer)?
     ;
     
 constantDeclaratorsRest
@@ -238,7 +239,7 @@ constantDeclaratorRest
     ;
     
 variableDeclaratorId
-    :   Identifier ('[' ']')*
+    :   ('[' ']')* 
     ;
 
 variableInitializer
@@ -252,17 +253,17 @@ arrayInitializer
 
 modifier
     :   annotation
-    |   'public'
-    |   'protected'
-    |   'private'
-    |   'static'
-    |   'abstract'
-    |   'final'
-    |   'native'
-    |   'synchronized'
-    |   'transient'
-    |   'volatile'
-    |   'strictfp'
+    |   'public' {System.out.print("  public "); }
+    |   'protected' {System.out.print("  protected "); }
+    |   'private' {System.out.print("  private "); }
+    |   'static' {System.out.print("  static "); }
+    |   'abstract' {System.out.print("  abstract "); }
+    |   'final' {System.out.print("  final "); }
+    |   'native' {System.out.print("  native "); }
+    |   'synchronized' {System.out.print("  synchronized "); }
+    |   'transient' {System.out.print("  transient "); }
+    |   'volatile' {System.out.print("  volatile "); }
+    |   'strictfp' {System.out.print("  strictfp "); }
     ;
 
 packageOrTypeName
@@ -290,26 +291,26 @@ classOrInterfaceType
 	                       	  System.out.println("implements "+$I1.text); isExtends=false;
 	                       	  isImp=false;
 	                       } 
-	                       //else
-	                       //System.out.println("Found type " + $I1.text);
+	                       else
+	                        System.out.print("" + $I1.text +" ");
 	                       }
-	         typeArguments? ('.' Identifier typeArguments? )*
+	         typeArguments? ('.' Identifier typeArguments? )* 
 	;
 
 primitiveType
-    :   'boolean'
-    |   'char'
-    |   'byte'
-    |   'short'
-    |   'int'// {System.out.println("Found int"); intCount++;}
-    |   'long'
-    |   'float'
-    |   'double'
+    :   'boolean' {System.out.print("boolean "); }
+    |   'char' {System.out.print("char "); }
+    |   'byte' {System.out.print("byte "); }
+    |   'short' {System.out.print("short "); }
+    |   'int'  {System.out.print("int "); intCount++;}
+    |   'long' {System.out.print("long "); }
+    |   'float' {System.out.print("float "); }
+    |   'double' {System.out.print("double "); }
     ;
 
 variableModifier
-    :   'final'
-    |   annotation
+    :   'final'  {System.out.print("final "); }
+    |  Identifier annotation //{System.out.print(""+$Identifier.text);}
     ;
 
 typeArguments
@@ -322,11 +323,11 @@ typeArgument
     ;
     
 qualifiedNameList
-    :   qualifiedName (',' qualifiedName)*
+    :  Identifier qualifiedName (',' qualifiedName)* 
     ;
 
 formalParameters
-    :   '(' formalParameterDecls? ')'
+    :   {System.out.print("(");}'(' formalParameterDecls? ')' {System.out.println(")");}
     ;
     
 formalParameterDecls
@@ -334,7 +335,7 @@ formalParameterDecls
     ;
     
 formalParameterDeclsRest
-    :   variableDeclaratorId (',' formalParameterDecls)?
+    :  Identifier variableDeclaratorId {System.out.print(""+$Identifier.text);}(',' {System.out.print(",");} formalParameterDecls)?  
     |   '...' variableDeclaratorId
     ;
     
