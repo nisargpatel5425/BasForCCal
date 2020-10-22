@@ -6,6 +6,7 @@ package BasForCCal;
 @members{
 boolean isExtends=false, isImp=false;
 int intCount=0;
+boolean isMethodMember = false, isDataMember = false;
 }
 @lexer::header{
 package BasForCCal;
@@ -68,10 +69,10 @@ classDeclaration
     ;
     
 normalClassDeclaration
-    :   'class' Identifier {System.out.println("Class:"+$Identifier.text);} typeParameters?
+    :   'class' Identifier {System.out.println("Class:"+$Identifier.text); isMethodMember=false; isDataMember=false;} typeParameters?
         ('extends'{isExtends=true;} type)?
         ('implements'{isImp= true;} typeList)?
-         {System.out.println(" Data Members: ");}classBody
+        { if(!isDataMember){ isDataMember = true;  System.out.println(" Data Members: ");}}classBody
        
     ;
     
@@ -131,20 +132,20 @@ interfaceBody
 classBodyDeclaration
     :   ';'  
     |   'static'? block
-    |    modifiers memberDecl
+    |    memberDecl
     ;
     
 memberDecl 
-    :   genericMethodOrConstructorDecl
-    |   memberDeclaration
-    |   'void' Identifier {System.out.print("void "+$Identifier.text);} voidMethodDeclaratorRest
-    |   Identifier {System.out.print($Identifier.text);} constructorDeclaratorRest
-    |   interfaceDeclaration
-    |   classDeclaration
+    :   modifiers genericMethodOrConstructorDecl
+    |   memberDeclaration 
+    |  { if(!isMethodMember){ isMethodMember = true;  System.out.println("Method Members: ");}}modifiers 'void' Identifier {System.out.print("void "+$Identifier.text);} voidMethodDeclaratorRest
+    |  { if(!isMethodMember){ isMethodMember = true;  System.out.println("Method Members: ");}}modifiers Identifier {System.out.print($Identifier.text);} constructorDeclaratorRest
+    |  { if(!isMethodMember){ isMethodMember = true;  System.out.println("Method Members: ");}}modifiers interfaceDeclaration
+    |  { if(!isMethodMember){ isMethodMember = true;  System.out.println("Method Members: ");}}modifiers classDeclaration
     ;
     
 memberDeclaration
-    :   type (methodDeclaration | fieldDeclaration)
+    :   ({ if(!isMethodMember){ isMethodMember = true;  System.out.println("Method Members: ");}} modifiers type methodDeclaration | modifiers type fieldDeclaration)
     ;
 
 genericMethodOrConstructorDecl
@@ -172,13 +173,13 @@ interfaceBodyDeclaration
 interfaceMemberDecl
     :   interfaceMethodOrFieldDecl
     |   interfaceGenericMethodDecl
-    |   'void' Identifier voidInterfaceMethodDeclaratorRest
-    |   interfaceDeclaration
+    |   'void' Identifier {System.out.print("void "+$Identifier.text);} voidInterfaceMethodDeclaratorRest
+    |   Identifier {System.out.print($Identifier.text);} interfaceDeclaration
     |   classDeclaration
     ;
     
 interfaceMethodOrFieldDecl
-    :   type Identifier interfaceMethodOrFieldRest
+    :   type Identifier {System.out.print($Identifier.text);} interfaceMethodOrFieldRest
     ;
     
 interfaceMethodOrFieldRest
@@ -206,7 +207,7 @@ interfaceMethodDeclaratorRest
     ;
     
 interfaceGenericMethodDecl
-    :   typeParameters (type | 'void') Identifier
+    :   typeParameters (type | 'void') Identifier {System.out.print($Identifier.text);}
         interfaceMethodDeclaratorRest
     ;
     
@@ -454,12 +455,12 @@ block
     
 blockStatement
     :   localVariableDeclarationStatement
-    |   classOrInterfaceDeclaration
-    |   statement
+     | classOrInterfaceDeclaration
+      | statement
     ;
     
 localVariableDeclarationStatement
-    :    localVariableDeclaration ';'
+    :   localVariableDeclaration ';'
     ;
 
 localVariableDeclaration
