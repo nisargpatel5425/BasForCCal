@@ -2,11 +2,15 @@ grammar BasForCCal;
 options {backtrack=true; memoize=true;}
 @header{
 package BasForCCal;
+import java.io.*;
 }
 @members{
 boolean isExtends=false, isImp=false;
 int intCount=0;
+String hasDescendant;
 boolean isMethodMember = false, isDataMember = false;
+static String finalExtraction = "";
+static BufferedWriter writer;
 }
 @lexer::header{
 package BasForCCal;
@@ -25,7 +29,15 @@ compilationUnit
         |   classOrInterfaceDeclaration typeDeclaration*
         )
     |   packageDeclaration? importDeclaration* typeDeclaration*
-    ;
+     	{try{ 
+	        writer= new BufferedWriter(new FileWriter("/Users/kjdes/Documents/output.txt")); 
+		String[] words = finalExtraction.split("/n");
+        	for (String word: words) {
+        	     writer.write(word);
+        	     writer.newLine();
+        	    }
+      		writer.close();
+      		}catch(Exception ex){}}; 
 
 packageDeclaration
     :   'package' qualifiedName ';'
@@ -69,10 +81,13 @@ classDeclaration
     ;
     
 normalClassDeclaration
-    :   'class' Identifier {System.out.println("Class:"+$Identifier.text); isMethodMember=false; isDataMember=false;} typeParameters?
-        ('extends'{isExtends=true;} type)?
+    :   'class' Identifier {System.out.println("Class:"+$Identifier.text); 
+    			finalExtraction = finalExtraction + ("/n Class:"+$Identifier.text);
+    			isMethodMember=false; isDataMember=false;} typeParameters?
+        ('extends' {isExtends=true;} type)?
         ('implements'{isImp= true;} typeList)?
-        { if(!isDataMember){ isDataMember = true;  System.out.println(" Data Members: ");}}classBody
+        { if(!isDataMember){ isDataMember = true;  System.out.println(" Data Members: ");
+        finalExtraction = finalExtraction + ("/n  Data Members: ");}}classBody
        
     ;
     
@@ -138,14 +153,21 @@ classBodyDeclaration
 memberDecl 
     :   modifiers genericMethodOrConstructorDecl
     |   memberDeclaration 
-    |  { if(!isMethodMember){ isMethodMember = true;  System.out.println("Method Members: ");}}modifiers 'void' Identifier {System.out.print("void "+$Identifier.text);} voidMethodDeclaratorRest
-    |  { if(!isMethodMember){ isMethodMember = true;  System.out.println("Method Members: ");}}modifiers Identifier {System.out.print($Identifier.text);} constructorDeclaratorRest
-    |  { if(!isMethodMember){ isMethodMember = true;  System.out.println("Method Members: ");}}modifiers interfaceDeclaration
-    |  { if(!isMethodMember){ isMethodMember = true;  System.out.println("Method Members: ");}}modifiers classDeclaration
+    |  { if(!isMethodMember){ isMethodMember = true;  System.out.println(" Method Members: ");
+    				finalExtraction = finalExtraction + ("/n  Method Members: ");}}modifiers 'void' Identifier {System.out.print("void "+$Identifier.text);
+    				finalExtraction = finalExtraction + ("void "+$Identifier.text );} voidMethodDeclaratorRest
+    |  { if(!isMethodMember){ isMethodMember = true;  System.out.println(" Method Members: ");
+    				finalExtraction = finalExtraction + ("/n  Method Members: ");}}modifiers Identifier {System.out.print($Identifier.text);
+    				finalExtraction = finalExtraction + $Identifier.text;} constructorDeclaratorRest
+    |  { if(!isMethodMember){ isMethodMember = true;  System.out.println(" Method Members: ");
+    				finalExtraction = finalExtraction + ("/n  Method Members: ");}}modifiers interfaceDeclaration
+    |  { if(!isMethodMember){ isMethodMember = true;  System.out.println(" Method Members: ");
+    				finalExtraction = finalExtraction + ("/n  Method Members: ");}}modifiers classDeclaration
     ;
     
 memberDeclaration
-    :   ({ if(!isMethodMember){ isMethodMember = true;  System.out.println("Method Members: ");}} modifiers type methodDeclaration | modifiers type fieldDeclaration)
+    :   ({ if(!isMethodMember){ isMethodMember = true;  System.out.println(" Method Members: ");
+    				finalExtraction = finalExtraction + ("/n  Method Members: ");}} modifiers type methodDeclaration | modifiers type fieldDeclaration)
     ;
 
 genericMethodOrConstructorDecl
@@ -158,7 +180,7 @@ genericMethodOrConstructorRest
     ;
 
 methodDeclaration
-    :   Identifier {System.out.print($Identifier.text);} methodDeclaratorRest
+    :   Identifier {System.out.print($Identifier.text); finalExtraction = finalExtraction + $Identifier.text ;} methodDeclaratorRest
     ;
 
 fieldDeclaration
@@ -173,13 +195,13 @@ interfaceBodyDeclaration
 interfaceMemberDecl
     :   interfaceMethodOrFieldDecl
     |   interfaceGenericMethodDecl
-    |   'void' Identifier {System.out.print("void "+$Identifier.text);} voidInterfaceMethodDeclaratorRest
-    |   Identifier {System.out.print($Identifier.text);} interfaceDeclaration
+    |   'void' Identifier {System.out.print("void "+$Identifier.text); finalExtraction = finalExtraction + ("void"+$Identifier.text );} voidInterfaceMethodDeclaratorRest
+    |   Identifier {System.out.print($Identifier.text); finalExtraction = finalExtraction + ($Identifier.text );} interfaceDeclaration
     |   classDeclaration
     ;
     
 interfaceMethodOrFieldDecl
-    :   type Identifier {System.out.print($Identifier.text);} interfaceMethodOrFieldRest
+    :   type Identifier {System.out.print($Identifier.text); finalExtraction = finalExtraction + ($Identifier.text );} interfaceMethodOrFieldRest
     ;
     
 interfaceMethodOrFieldRest
@@ -207,7 +229,7 @@ interfaceMethodDeclaratorRest
     ;
     
 interfaceGenericMethodDecl
-    :   typeParameters (type | 'void') Identifier {System.out.print($Identifier.text);}
+    :   typeParameters (type | 'void') Identifier {System.out.print($Identifier.text); finalExtraction = finalExtraction + ($Identifier.text );}
         interfaceMethodDeclaratorRest
     ;
     
@@ -224,11 +246,11 @@ constantDeclarator
     ;
     
 variableDeclarators
-    :   variableDeclarator (',' {System.out.print(",");} variableDeclarator)* 
+    :   variableDeclarator (',' {System.out.print(", "); finalExtraction = finalExtraction + ", " ;} variableDeclarator)* 
     ;
 
 variableDeclarator
-    :   Identifier variableDeclaratorId  {System.out.println($Identifier.text);}('=' variableInitializer)?
+    :   Identifier {System.out.println($Identifier.text);finalExtraction = finalExtraction + ($Identifier.text );} variableDeclaratorId  ('=' variableInitializer)?
     ;
     
 constantDeclaratorsRest
@@ -254,17 +276,17 @@ arrayInitializer
 
 modifier
     :   annotation
-    |   'public' {System.out.print("  public "); }
-    |   'protected' {System.out.print("  protected "); }
-    |   'private' {System.out.print("  private "); }
-    |   'static' {System.out.print("  static "); }
-    |   'abstract' {System.out.print("  abstract "); }
-    |   'final' {System.out.print("  final "); }
-    |   'native' {System.out.print("  native "); }
-    |   'synchronized' {System.out.print("  synchronized "); }
-    |   'transient' {System.out.print("  transient "); }
-    |   'volatile' {System.out.print("  volatile "); }
-    |   'strictfp' {System.out.print("  strictfp "); }
+    |   'public' {System.out.print("  public "); finalExtraction = finalExtraction + "\n  public ";}
+    |   'protected' {System.out.print("  protected "); finalExtraction = finalExtraction + "\n  protected ";}
+    |   'private' {System.out.print("  private "); finalExtraction = finalExtraction + "\n  private ";}
+    |   'static' {System.out.print("  static "); finalExtraction = finalExtraction + "  static ";}
+    |   'abstract' {System.out.print("  abstract "); finalExtraction = finalExtraction + "\n  abstract ";}
+    |   'final' {System.out.print("  final "); finalExtraction = finalExtraction + "  final ";}
+    |   'native' {System.out.print("  native "); finalExtraction = finalExtraction + "\n  native ";}
+    |   'synchronized' {System.out.print("  synchronized "); finalExtraction = finalExtraction + "  synchronized ";}
+    |   'transient' {System.out.print("  transient "); finalExtraction = finalExtraction + "  transient ";}
+    |   'volatile' {System.out.print("  volatile "); finalExtraction = finalExtraction + "  volatile ";}
+    |   'strictfp' {System.out.print("  strictfp "); finalExtraction = finalExtraction + "  strictfp ";}
     ;
 
 packageOrTypeName
@@ -286,31 +308,34 @@ type
 
 classOrInterfaceType
 	:	I1=Identifier {if(isExtends){ 
-	                          System.out.println("Ancestor classes:  "+$I1.text); isExtends=false;} 
+	                          System.out.println("Ancestor classes:  "+$I1.text); isExtends=false;
+	                          finalExtraction = finalExtraction + "\n  Ancestor classes: "+$I1.text; } 
 	                       else 
 	                       if(isImp){
 	                       	  System.out.println("implements "+$I1.text); isExtends=false;
 	                       	  isImp=false;
+	                       	  finalExtraction = finalExtraction + "\n  implements: "+$I1.text; 
 	                       } 
 	                       else
-	                        System.out.print("" + $I1.text +" ");
+	                        System.out.print( $I1.text +" ");
+	                        finalExtraction = finalExtraction + "    "+$I1.text+" "; 
 	                       }
 	         typeArguments? ('.' Identifier typeArguments? )* 
 	;
 
 primitiveType
-    :   'boolean' {System.out.print("boolean "); }
-    |   'char' {System.out.print("char "); }
-    |   'byte' {System.out.print("byte "); }
-    |   'short' {System.out.print("short "); }
-    |   'int'  {System.out.print("int "); intCount++;}
-    |   'long' {System.out.print("long "); }
-    |   'float' {System.out.print("float "); }
-    |   'double' {System.out.print("double "); }
+    :   'boolean' {System.out.print("boolean "); finalExtraction = finalExtraction + "boolean ";}
+    |   'char' {System.out.print("char "); finalExtraction = finalExtraction + "char ";}
+    |   'byte' {System.out.print("byte "); finalExtraction = finalExtraction + "byte ";}
+    |   'short' {System.out.print("short "); finalExtraction = finalExtraction + "short ";}
+    |   'int'  {System.out.print("int "); intCount++;finalExtraction = finalExtraction + "int ";}
+    |   'long' {System.out.print("long "); finalExtraction = finalExtraction + "long ";}
+    |   'float' {System.out.print("float "); finalExtraction = finalExtraction + "float ";}
+    |   'double' {System.out.print("double "); finalExtraction = finalExtraction + "double ";}
     ;
 
 variableModifier
-    :   'final'  {System.out.print("final "); }
+    :   'final'  {System.out.print("final "); finalExtraction = finalExtraction + "final ";}
     |  Identifier annotation //{System.out.print(""+$Identifier.text);}
     ;
 
@@ -328,7 +353,7 @@ qualifiedNameList
     ;
 
 formalParameters
-    :   {System.out.print("(");}'(' formalParameterDecls? ')' {System.out.println(")");}
+    :   {System.out.print("(");finalExtraction = finalExtraction + "(";}'(' formalParameterDecls? ')' {System.out.println(")");finalExtraction = finalExtraction + ")";}
     ;
     
 formalParameterDecls
@@ -336,7 +361,8 @@ formalParameterDecls
     ;
     
 formalParameterDeclsRest
-    :  Identifier variableDeclaratorId {System.out.print(""+$Identifier.text);}(',' {System.out.print(",");} formalParameterDecls)?  
+    :  Identifier variableDeclaratorId {System.out.print(""+$Identifier.text);
+    finalExtraction = finalExtraction + $Identifier.text;}(',' {System.out.print(",");finalExtraction = finalExtraction + ",";} formalParameterDecls)?  
     |   '...' variableDeclaratorId
     ;
     
@@ -454,9 +480,10 @@ block
     ;
     
 blockStatement
-    :   localVariableDeclarationStatement
-     | classOrInterfaceDeclaration
+    :  localVariableDeclarationStatement
+      | classOrInterfaceDeclaration
       | statement
+     
     ;
     
 localVariableDeclarationStatement
