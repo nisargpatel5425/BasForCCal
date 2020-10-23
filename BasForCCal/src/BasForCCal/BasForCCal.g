@@ -250,7 +250,7 @@ variableDeclarators
     ;
 
 variableDeclarator
-    :   Identifier {System.out.println($Identifier.text);finalExtraction = finalExtraction + ($Identifier.text );} variableDeclaratorId  ('=' variableInitializer)?
+    :   Identifier {if(!isMethodMember){System.out.println($Identifier.text);finalExtraction = finalExtraction + ($Identifier.text );}} variableDeclaratorId  ('=' variableInitializer)?
     ;
     
 constantDeclaratorsRest
@@ -317,21 +317,23 @@ classOrInterfaceType
 	                       	  finalExtraction = finalExtraction + "\n  implements: "+$I1.text; 
 	                       } 
 	                       else
+	                       if(!isMethodMember){
 	                        System.out.print( $I1.text +" ");
 	                        finalExtraction = finalExtraction + "    "+$I1.text+" "; 
+	                        }
 	                       }
 	         typeArguments? ('.' Identifier typeArguments? )* 
 	;
 
 primitiveType
-    :   'boolean' {System.out.print("boolean "); finalExtraction = finalExtraction + "boolean ";}
-    |   'char' {System.out.print("char "); finalExtraction = finalExtraction + "char ";}
-    |   'byte' {System.out.print("byte "); finalExtraction = finalExtraction + "byte ";}
-    |   'short' {System.out.print("short "); finalExtraction = finalExtraction + "short ";}
-    |   'int'  {System.out.print("int "); intCount++;finalExtraction = finalExtraction + "int ";}
-    |   'long' {System.out.print("long "); finalExtraction = finalExtraction + "long ";}
-    |   'float' {System.out.print("float "); finalExtraction = finalExtraction + "float ";}
-    |   'double' {System.out.print("double "); finalExtraction = finalExtraction + "double ";}
+    :   'boolean' {if(!isMethodMember){System.out.print("boolean "); finalExtraction = finalExtraction + "boolean ";}}
+    |   'char' {if(!isMethodMember){System.out.print("char "); finalExtraction = finalExtraction + "char ";}}
+    |   'byte' {if(!isMethodMember){System.out.print("byte "); finalExtraction = finalExtraction + "byte ";}}
+    |   'short' {if(!isMethodMember){System.out.print("short "); finalExtraction = finalExtraction + "short ";}}
+    |   'int'  {if(!isMethodMember){System.out.print("int "); intCount++;finalExtraction = finalExtraction + "int ";}}
+    |   'long' {if(!isMethodMember){System.out.print("long "); finalExtraction = finalExtraction + "long ";}}
+    |   'float' {if(!isMethodMember){System.out.print("float "); finalExtraction = finalExtraction + "float ";}}
+    |   'double' {if(!isMethodMember){System.out.print("double "); finalExtraction = finalExtraction + "double ";}}
     ;
 
 variableModifier
