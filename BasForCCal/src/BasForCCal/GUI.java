@@ -25,17 +25,18 @@ import java.util.Random;
 public class GUI extends JFrame implements ActionListener {
 
 	static JFrame f; 
-	  
-    // text areas 
-    static JTextArea t1, t2; 
-    
+    static JTextArea t1, t2;  
     static String  folderPath="/Users/kjdes/Documents/CECS547/Project/";
     JMenuBar jMenubar;    
 	JMenu jMenu;    
 	JMenuItem jOpen;    
 	JTextArea jTextArea;  
 	JTree tree;
-	
+	DefaultMutableTreeNode   root = new DefaultMutableTreeNode("root",true);
+	 JPanel p1 = new JPanel(); 
+     JPanel p2 = new JPanel(); 
+     JPanel ptext = new JPanel();
+     JPanel ptree = new JPanel();
 	GUI(){
 	    
 	}
@@ -59,7 +60,6 @@ public class GUI extends JFrame implements ActionListener {
 	//Reference End: https://www.rgagnon.com/javadetails/java-0324.html
 	 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		
 		f = new JFrame("frame"); 
 		  
@@ -71,28 +71,20 @@ public class GUI extends JFrame implements ActionListener {
 		s.jMenubar=new JMenuBar();    
 		s.jMenubar.setBounds(0,0,1000,30);    
 		s.jMenubar.add(s.jMenu); 
-        JPanel p1 = new JPanel(); 
-        JPanel p2 = new JPanel(); 
-        JPanel ptext = new JPanel();
-        JPanel ptree = new JPanel();
-        t2 = new JTextArea(50,50); 
-
        
-               
-        s.tree = new JTree();
-
+        t2 = new JTextArea(50,50); 
+        s.ptree.setSize(500, 100);
+       
 		s.add(s.jMenubar); 
 
 		File fileRoot = new File(folderPath);
 		
-		DefaultMutableTreeNode   root = new DefaultMutableTreeNode("root",true);
-		
-	    s.getList(root, new File(folderPath));
-	    s.tree = new JTree(root);
+	    s.getList(s.root, new File(folderPath));
+	    s.tree = new JTree(s.root);
 	    s.tree.setRootVisible(false);
 
-	   p1.add(s.jMenubar); 
-	   ptree.add(new JScrollPane((JTree)s.tree),"Center");
+	   s.p1.add(s.jMenubar); 
+	   s.ptree.add(((JTree)s.tree),"Center");
 	   s.tree.getSelectionModel().addTreeSelectionListener(new TreeSelectionListener() {
 	         
 			/* (non-Javadoc)
@@ -120,85 +112,75 @@ public class GUI extends JFrame implements ActionListener {
 			}}
 			
        });
-	   ptext.add(t2);
-	   JSplitPane s2 = new JSplitPane(SwingConstants.VERTICAL, ptree, ptext); 
-	   p2.add(s2);
-	   JSplitPane sl = new JSplitPane(SwingConstants.HORIZONTAL, p1, p2); 
+	   s.ptext.add(t2);
+	   JSplitPane s2 = new JSplitPane(SwingConstants.VERTICAL,new JScrollPane( s.ptree), new JScrollPane( s.ptext)); 
+	   s.p2.add(s2);
+	   JSplitPane sl = new JSplitPane(SwingConstants.HORIZONTAL, s.p1, s.p2); 
+	   sl.setBounds(0, 0, 1000, 500);
 	   f. pack();
-        f.add(sl); 
+        f.add(new JScrollPane( sl ) ); 
   
-        f.setSize(1000, 1000); 
+        f.setSize(1500, 1500); 
   
         f.show(); 
         
-        
+
        
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
+
 	/* (non-Javadoc)
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Example example;
-		
+		Path path;
 		if(e.getSource()==jOpen){ 
 	      
 			String finalFileContent="";
 		    JFileChooser selectFiles=new JFileChooser();    
 		    selectFiles.setMultiSelectionEnabled(true); 
-		    int approveOption=selectFiles.showOpenDialog(this);    
-		    if(approveOption ==JFileChooser.APPROVE_OPTION){ 
-
-		    	Random r = new Random();
-		    	int low = 1;
-		    	int high = 100;
-		    	int result = r.nextInt(high-low) + low;
-		    	Path path = Paths.get(folderPath+result);
+		    int approveOption=selectFiles.showOpenDialog(this); 
+		    Random r = new Random();
+	    	int low = 1;
+	    	int high = 100;
+	    	int result = r.nextInt(high-low) + low;
+	    	 path = Paths.get(folderPath+result);
+		    if(approveOption ==JFileChooser.APPROVE_OPTION){  
+		    	
 		    	  try {
 					Files.createDirectories(path);
-				} catch (IOException e2) {
-					// TODO Auto-generated catch block
-					e2.printStackTrace();
-				}
-		    	File files[] =selectFiles.getSelectedFiles(); 
-		    	int t=0;
-		    	 while (t++ < files.length) {
-		        String filepath=files[t - 1].getPath(); 
-		       String newFileName= files[t - 1].getName();
-	        
-		       try {
-				Files.copy(files[t - 1].toPath(), new File(path+"/"+newFileName+".java").toPath());
-				
-		        example= new Example();
-		        example.parseProg(filepath, path+"/output.txt");
-			} 
-
-
-		        catch (IOException e1) {
+					File files[] =selectFiles.getSelectedFiles(); 
+			    	int t=0;
+			    	while (t++ < files.length) {
+				        String filepath=files[t - 1].getPath(); 
+				        String newFileName= files[t - 1].getName();
+				        Files.copy(files[t - 1].toPath(), new File(path+"/"+newFileName+".java").toPath());
+						example= new Example();
+				        example.parseProg(filepath, path+"/output.txt");
+			    	} 
+		    	  } catch (IOException e1) {
 					e1.printStackTrace();
-				} catch (RecognitionException e1) {
-					// TODO Auto-generated catch block
+		    	  } catch (RecognitionException e1) {
 					e1.printStackTrace();
-				}
+		    	  }
 		        
 		       }    
-		    	 try{   
+		    	 try{ 
 		             BufferedReader br=new BufferedReader(new FileReader(path+"/output.txt"));    
 		             String s1="",s2="";                         
 		             while((s1=br.readLine())!=null){    
 		             s2+=s1+"\n";    
 		             }    
-		             t2.setText(s2);  
+		             t2.setText(s2); 
 		             br.close();    
 		             }catch (Exception ex) {ex.printStackTrace();  } 
 		    }    
 		}
 	} 
 
+	
 
-
-
-	}
+	

@@ -22,6 +22,7 @@ boolean variableDeclare=false;
 boolean isMethodVariable=false;
 ArrayList<String> aggregates = new ArrayList<String>();
 ArrayList<String> associates = new ArrayList<String>();
+ArrayList<Integer> indices = new ArrayList<>();
 
 public void printData(List<String> str, String tabs)
      	{
@@ -86,7 +87,6 @@ map.put(key,methodcalls);
      	
      	search = "Descendants of" ;
      	int in=0,count=0;
-     	String newString = new String(); 
      	StringBuffer str = new StringBuffer(finalExtraction);
      	  while (true) {
            
@@ -102,9 +102,6 @@ map.put(key,methodcalls);
           		if(ancestormap.containsKey(cls)){
           		
 				str.insert(ind1, ancestormap.get(cls)); 
-				
-			}else{
-				str.insert(ind1, " No Descendants"); 
 				
 			}
                		finalExtraction = str.toString();
