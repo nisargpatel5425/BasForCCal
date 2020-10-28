@@ -7,7 +7,7 @@ import java.io.*;
 @members{
 boolean isExtends=false, isImp=false;
 int intCount=0;
-boolean isMethodMember = false, isDataMember = false;
+boolean isMethodMember = false, isDataMember = false,isClassObject= false;
 static String finalExtraction = "";
 static BufferedWriter writer;
 String methodname = "",descendantname="",search="";
@@ -83,8 +83,8 @@ map.put(key,methodcalls);
      	
      	search = "Descendants of" ;
      	int in=0,count=0;
-     	 String newString = new String(); 
-     	   StringBuffer str = new StringBuffer(finalExtraction);
+     	String newString = new String(); 
+     	StringBuffer str = new StringBuffer(finalExtraction);
      	  while (true) {
            
            in = finalExtraction.indexOf(search, in);
@@ -113,9 +113,7 @@ map.put(key,methodcalls);
             	
             	} else {
                 	break;
-            	}
-            	
-          
+            	}   
         }
      
         try{ 
@@ -158,13 +156,13 @@ classOrInterfaceModifiers
 
 classOrInterfaceModifier
     :   annotation   // class or interface
-    |   'public'     //{System.out.println("found public");}// class or interface
-    |   'protected'   //{System.out.println("found protected");}// class or interface
-    |   'private'    // {System.out.println("found private");}// class or interface
-    |   'abstract'   // class or interface
-    |   'static'     // class or interface
-    |   'final'      // class only -- does not apply to interfaces
-    |   'strictfp'   // class or interface
+    |   'public' {System.out.print("  public "); finalExtraction = finalExtraction + "  public ";}
+    |   'protected' {System.out.print("  protected "); finalExtraction = finalExtraction + "  protected ";}
+    |   'private' {System.out.print("  private "); finalExtraction = finalExtraction + "  private ";}
+    |   'static' {System.out.print("  static "); finalExtraction = finalExtraction + "  static ";}
+    |   'abstract' {System.out.print("  abstract "); finalExtraction = finalExtraction + " abstract ";}
+    |   'final' {System.out.print("  final "); finalExtraction = finalExtraction + "  final ";}
+    |   'strictfp' {System.out.print("  strictfp "); finalExtraction = finalExtraction + "  strictfp ";}
     ;
 
 modifiers
@@ -177,14 +175,14 @@ classDeclaration
     ;
     
 normalClassDeclaration
-    :   'class' Identifier {System.out.println("Class:"+$Identifier.text); 
-    			finalExtraction = finalExtraction + ("/n Class:"+$Identifier.text);
-    			isMethodMember=false; isDataMember=false;isMethodVariable=false;} typeParameters?
+    :   'class' Identifier {System.out.print("Class:"+$Identifier.text); 
+    			finalExtraction = finalExtraction + ("Class:"+$Identifier.text);
+    			isMethodMember=false; isDataMember=false;isMethodVariable=false;isClassObject = false;} typeParameters?
         ('extends' {isExtends=true; descendants = new ArrayList<>(); descendantname = $Identifier.text;} type)?
         ('implements'{isImp= true;} typeList)?
-        { System.out.println(" Descendants of " +$Identifier.text+":");finalExtraction = finalExtraction + ("/n Descendants of "+$Identifier.text+":"); 
+        { System.out.println(" Descendants of " +$Identifier.text+":");finalExtraction = finalExtraction + ("\n Descendants of "+$Identifier.text+":"); 
          if(!isDataMember){isDataMember = true;  System.out.println(" Data Members: ");
-        finalExtraction = finalExtraction + ("/n  Data Members: ");}}classBody
+        finalExtraction = finalExtraction + ("\n  Data Members: \n");}}classBody
        
     ;
     
@@ -252,20 +250,20 @@ memberDecl
     :   modifiers genericMethodOrConstructorDecl
     |   memberDeclaration 
     |  { if(!isMethodMember){ isMethodMember = true;  System.out.println(" Method Members: ");
-    				finalExtraction = finalExtraction + ("/n  Method Members: ");}}modifiers 'void' Identifier {System.out.print("void "+$Identifier.text); if(!key.equals("")){map.put(key,methodcalls);} key = $Identifier.text; methodcalls = new ArrayList<>();
+    				finalExtraction = finalExtraction + ("\n  Method Members: \n");}}modifiers 'void' Identifier {System.out.print("void "+$Identifier.text); if(!key.equals("")){map.put(key,methodcalls);} key = $Identifier.text; methodcalls = new ArrayList<>();
     				finalExtraction = finalExtraction + ("void "+$Identifier.text );} voidMethodDeclaratorRest
     |  { if(!isMethodMember){ isMethodMember = true;  System.out.println(" Method Members: ");
-    				finalExtraction = finalExtraction + ("/n  Method Members: ");}}modifiers Identifier {System.out.print($Identifier.text);
+    				finalExtraction = finalExtraction + ("\n  Method Members: \n");}}modifiers Identifier {System.out.print($Identifier.text);
     				finalExtraction = finalExtraction + $Identifier.text; } constructorDeclaratorRest
     				    |  { if(!isMethodMember){ isMethodMember = true;  System.out.println(" Method Members: ");
-    				finalExtraction = finalExtraction + ("/n  Method Members: ");}}modifiers interfaceDeclaration
+    				finalExtraction = finalExtraction + ("\n  Method Members: \n");}}modifiers interfaceDeclaration
     |  { if(!isMethodMember){ isMethodMember = true;  System.out.println(" Method Members: ");
-    				finalExtraction = finalExtraction + ("/n  Method Members: ");}}modifiers classDeclaration
+    				finalExtraction = finalExtraction + ("\n  Method Members: \n");}}modifiers classDeclaration
     ;
     
 memberDeclaration
     :   ({ if(!isMethodMember){ isMethodMember = true;  System.out.println(" Method Members: ");
-    				finalExtraction = finalExtraction + ("/n  Method Members: ");}} modifiers type methodDeclaration | modifiers{variableDeclare=true;} type fieldDeclaration)
+    				finalExtraction = finalExtraction + ("\n  Method Members: \n");}} modifiers type methodDeclaration | modifiers{variableDeclare=true; isClassObject = true;} type fieldDeclaration)
     ;
 
 genericMethodOrConstructorDecl
@@ -299,7 +297,7 @@ interfaceMemberDecl
     ;
     
 interfaceMethodOrFieldDecl
-    :   type Identifier {System.out.print($Identifier.text); finalExtraction = finalExtraction + ($Identifier.text );} interfaceMethodOrFieldRest
+    :  {isClassObject = true;} type Identifier {System.out.print($Identifier.text); finalExtraction = finalExtraction + ($Identifier.text ); } interfaceMethodOrFieldRest
     ;
     
 interfaceMethodOrFieldRest
@@ -348,7 +346,7 @@ variableDeclarators
     ;
 
 variableDeclarator
-    :   Identifier {if(!isMethodMember){System.out.println($Identifier.text);finalExtraction = finalExtraction + ($Identifier.text );}} variableDeclaratorId  ('=' variableInitializer)?
+    :   Identifier {isClassObject= false;System.out.println($Identifier.text+"\n");finalExtraction = finalExtraction + ($Identifier.text+"\n" );} variableDeclaratorId  ('=' variableInitializer)?
     ;
     
 constantDeclaratorsRest
@@ -356,7 +354,7 @@ constantDeclaratorsRest
     ;
 
 constantDeclaratorRest
-    :   ('[' ']')* '=' variableInitializer
+    : {isClassObject= false;}  ('[' ']')* '=' variableInitializer
     ;
     
 variableDeclaratorId
@@ -374,13 +372,13 @@ arrayInitializer
 
 modifier
     :   annotation
-    |   'public' {System.out.print("  public "); finalExtraction = finalExtraction + "\n  public ";}
-    |   'protected' {System.out.print("  protected "); finalExtraction = finalExtraction + "\n  protected ";}
-    |   'private' {System.out.print("  private "); finalExtraction = finalExtraction + "\n  private ";}
+    |   'public' {System.out.print("  public "); finalExtraction = finalExtraction + "  public ";}
+    |   'protected' {System.out.print("  protected "); finalExtraction = finalExtraction + "  protected ";}
+    |   'private' {System.out.print("  private "); finalExtraction = finalExtraction + "  private ";}
     |   'static' {System.out.print("  static "); finalExtraction = finalExtraction + "  static ";}
-    |   'abstract' {System.out.print("  abstract "); finalExtraction = finalExtraction + "\n  abstract ";}
+    |   'abstract' {System.out.print("  abstract "); finalExtraction = finalExtraction + " abstract ";}
     |   'final' {System.out.print("  final "); finalExtraction = finalExtraction + "  final ";}
-    |   'native' {System.out.print("  native "); finalExtraction = finalExtraction + "\n  native ";}
+    |   'native' {System.out.print("  native "); finalExtraction = finalExtraction + "  native ";}
     |   'synchronized' {System.out.print("  synchronized "); finalExtraction = finalExtraction + "  synchronized ";}
     |   'transient' {System.out.print("  transient "); finalExtraction = finalExtraction + "  transient ";}
     |   'volatile' {System.out.print("  volatile "); finalExtraction = finalExtraction + "  volatile ";}
@@ -421,9 +419,19 @@ classOrInterfaceType
 	                       	  isImp=false;
 	                       	  finalExtraction = finalExtraction + "\n  implements: "+$I1.text; 
 	                       } 
-	                       else if(!isMethodVariable &&  !isExtends  && !isImp ){
-	                        System.out.print( $I1.text +" ");
-	                        finalExtraction = finalExtraction + "    "+$I1.text+" "; 
+	                       else {
+	                       		if(isMethodVariable &&  !isExtends  && !isImp ){
+			                       System.out.println("Local variable: ");
+			                       finalExtraction = finalExtraction + "Local Variables:  \n"; 
+			                       isMethodVariable = false;}
+		                       if(!isMethodVariable)
+		                       {
+			                       if(isClassObject){
+			                        System.out.print( $I1.text +" ");
+			                        finalExtraction = finalExtraction + "    "+$I1.text+" "; 
+			                        isClassObject = false;
+			                       }
+		                        }
 	                        }
 	                       if  (!$I1.text.equals("int") && !$I1.text.equals("boolean")&& !$I1.text.equals("char") && !$I1.text.equals("byte")
 	                        && !$I1.text.equals("short") && !$I1.text.equals("long") && !$I1.text.equals("float")&&!$I1.text.equals("double")&&!$I1.text.equals("String")){
@@ -439,14 +447,30 @@ classOrInterfaceType
 	;
 
 primitiveType
-    :   'boolean' {if(!isMethodVariable){System.out.print("boolean "); finalExtraction = finalExtraction + "boolean ";}}
-    |   'char' {if(!isMethodVariable){System.out.print("char "); finalExtraction = finalExtraction + "char ";}}
-    |   'byte' {if(!isMethodVariable){System.out.print("byte "); finalExtraction = finalExtraction + "byte ";}}
-    |   'short' {if(!isMethodVariable){System.out.print("short "); finalExtraction = finalExtraction + "short ";}}
-    |   'int'  {if(!isMethodVariable){System.out.print("int "); intCount++;finalExtraction = finalExtraction + "int ";}}
-    |   'long' {if(!isMethodVariable){System.out.print("long "); finalExtraction = finalExtraction + "long ";}}
-    |   'float' {if(!isMethodVariable){System.out.print("float "); finalExtraction = finalExtraction + "float ";}}
-    |   'double' {if(!isMethodVariable){System.out.print("double "); finalExtraction = finalExtraction + "double ";}}
+    :   'boolean' {if(isMethodVariable){  System.out.println("Local variable: ");
+	                       finalExtraction = finalExtraction + "Local Variables:  \n"; 
+	                       isMethodVariable = false; }{System.out.print("boolean "); finalExtraction = finalExtraction + "boolean ";}}
+    |   'char' {if(isMethodVariable){  System.out.println("Local variable: ");
+	                       finalExtraction = finalExtraction + "Local Variables:  \n"; 
+	                       isMethodVariable = false;}{System.out.print("char "); finalExtraction = finalExtraction + "char ";}}
+    |   'byte' {if(isMethodVariable){  System.out.println("Local variable: ");
+	                       finalExtraction = finalExtraction + "Local Variables:  \n"; 
+	                       isMethodVariable = false;}{System.out.print("byte "); finalExtraction = finalExtraction + "byte ";}}
+    |   'short' {if(isMethodVariable){  System.out.println("Local variable: ");
+	                       finalExtraction = finalExtraction + "Local Variables:  \n"; 
+	                       isMethodVariable = false;}{System.out.print("short "); finalExtraction = finalExtraction + "short ";}}
+    |   'int'  {if(isMethodVariable){  System.out.println("Local variable: ");
+	                       finalExtraction = finalExtraction + "Local Variables:  \n"; 
+	                       isMethodVariable = false;}{System.out.print("int "); intCount++;finalExtraction = finalExtraction + "int ";}}
+    |   'long' {if(isMethodVariable){  System.out.println("Local variable: ");
+	                       finalExtraction = finalExtraction + "Local Variables:  \n"; 
+	                       isMethodVariable = false;}{System.out.print("long "); finalExtraction = finalExtraction + "long ";}}
+    |   'float' {if(isMethodVariable){  System.out.println("Local variable: ");
+	                       finalExtraction = finalExtraction + "Local Variables:  \n"; 
+	                       isMethodVariable = false;}{System.out.print("float "); finalExtraction = finalExtraction + "float ";}}
+    |   'double' {if(isMethodVariable){  System.out.println("Local variable: ");
+	                       finalExtraction = finalExtraction + "Local Variables:  \n"; 
+	                       isMethodVariable = false;}{System.out.print("double "); finalExtraction = finalExtraction + "double ";}}
     ;
 
 variableModifier
@@ -468,7 +492,7 @@ qualifiedNameList
     ;
 
 formalParameters
-    :   {System.out.print("(");finalExtraction = finalExtraction + "(";}'(' formalParameterDecls? ')' {System.out.println(")");finalExtraction = finalExtraction + ")";}
+    :   {System.out.print("(");finalExtraction = finalExtraction + "(";}'(' formalParameterDecls? ')' {System.out.println(") \n");finalExtraction = finalExtraction + ") \n";}
     ;
     
 formalParameterDecls
@@ -482,7 +506,7 @@ formalParameterDeclsRest
     ;
     
 methodBody
-    :  {if(isMethodMember)isMethodVariable = true;} block
+    :  {if(isMethodMember){isMethodVariable = true;isClassObject = true;}} block
     ;
 
 constructorBody
@@ -538,7 +562,7 @@ elementValuePairs
     ;
 
 elementValuePair
-    :   Identifier '=' elementValue
+    :  {isClassObject= false;} Identifier '=' elementValue
     ;
     
 elementValue
@@ -841,13 +865,13 @@ primary
     |   'void' '.' 'class'
     ;
 trying	
-    :   ('.' Identifier  {methodname+= '.'+ $Identifier.text; } )*    identifierSuffix?
+    :   ('.' Identifier  {isClassObject= true;methodname+= '.'+ $Identifier.text; } )*    identifierSuffix?
     ;	
 identifierSuffix
-    :   ('[' ']')+ '.' 'class'
+    :    ('[' ']')+ '.' 'class'
     |   ('[' expression ']')+ // can also be matched by selector, but do here
     |   arguments { methodcalls.add(methodname); methodname ="";}
-    |   '.' 'class'
+    | 	 '.' 'class'
     |   '.' explicitGenericInvocation
     |   '.' 'this'
     |   '.' 'super' arguments
