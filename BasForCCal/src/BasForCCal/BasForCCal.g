@@ -3,6 +3,7 @@ options {backtrack=true; memoize=true;}
 @header{
 package BasForCCal;
 import java.io.*;
+
 }
 @members{
 boolean isExtends=false, isImp=false;
@@ -11,6 +12,29 @@ String hasDescendant;
 boolean isMethodMember = false, isDataMember = false;
 static String finalExtraction = "";
 static BufferedWriter writer;
+String methodname = "";
+ArrayList<String> methodcalls = new ArrayList<>();
+String key ="";
+Map<String,List<String>> map = new HashMap<>();
+
+public void printData(List<String> str, String tabs)
+     	{
+     		for(String methodcall : str)
+     		{
+     			System.out.println(tabs+ " ->"+methodcall);
+     			finalExtraction = finalExtraction + tabs +( "\n ->"+methodcall);
+     			String[] arr = methodcall.split("\\.");
+     			if(arr.length!= 0 &&map.containsKey(arr[arr.length - 1]))
+     			{
+     				printData(map.get(arr[arr.length - 1]), tabs+"\t");
+     			}
+     			else if(map.containsKey(methodcall))
+     			{
+     				printData(map.get(methodcall), tabs+"\t");
+     			}
+     		}
+     	}
+     	
 }
 @lexer::header{
 package BasForCCal;
@@ -29,8 +53,32 @@ compilationUnit
         |   classOrInterfaceDeclaration typeDeclaration*
         )
     |   packageDeclaration? importDeclaration* typeDeclaration*
-     	{try{ 
-	        writer= new BufferedWriter(new FileWriter("/Users/kjdes/Documents/output.txt")); 
+     	{
+     	map.put(key,methodcalls);
+     	for(Map.Entry<String, List<String>> entry : map.entrySet())
+     	{	
+     		System.out.println("Method Name:"+entry.getKey());
+     		finalExtraction = finalExtraction + ("\nMethod Name:"+entry.getKey());
+     		for(String methodcall : entry.getValue())
+     		{
+     			System.out.println("\t"+methodcall);
+     			finalExtraction = finalExtraction + ("\n\t"+methodcall);
+     			String[] arr = methodcall.split("\\.");
+     			if(arr.length!= 0 && map.containsKey(arr[arr.length - 1]))
+     			{
+     				printData(map.get(arr[arr.length - 1]),"\t");
+     			}
+     			else if(map.containsKey(methodcall))
+     			{
+     				printData(map.get(methodcall),"\t");
+     			}
+     		}
+     	}
+     	
+     	
+     	
+     	try{ 
+	        writer= new BufferedWriter(new FileWriter("/Users/nisargpatel/Downloads/output.txt")); 
 		String[] words = finalExtraction.split("/n");
         	for (String word: words) {
         	     writer.write(word);
@@ -154,7 +202,7 @@ memberDecl
     :   modifiers genericMethodOrConstructorDecl
     |   memberDeclaration 
     |  { if(!isMethodMember){ isMethodMember = true;  System.out.println(" Method Members: ");
-    				finalExtraction = finalExtraction + ("/n  Method Members: ");}}modifiers 'void' Identifier {System.out.print("void "+$Identifier.text);
+    				finalExtraction = finalExtraction + ("/n  Method Members: ");}}modifiers 'void' Identifier {System.out.print("void "+$Identifier.text); if(!key.equals("")){map.put(key,methodcalls);} key = $Identifier.text; methodcalls = new ArrayList<>();
     				finalExtraction = finalExtraction + ("void "+$Identifier.text );} voidMethodDeclaratorRest
     |  { if(!isMethodMember){ isMethodMember = true;  System.out.println(" Method Members: ");
     				finalExtraction = finalExtraction + ("/n  Method Members: ");}}modifiers Identifier {System.out.print($Identifier.text);
@@ -180,7 +228,7 @@ genericMethodOrConstructorRest
     ;
 
 methodDeclaration
-    :   Identifier {System.out.print($Identifier.text); finalExtraction = finalExtraction + $Identifier.text ;} methodDeclaratorRest
+    :   Identifier {System.out.print($Identifier.text);  if(!key.equals("")){map.put(key,methodcalls);} key = $Identifier.text; methodcalls = new ArrayList<>();  finalExtraction = finalExtraction + $Identifier.text ;} methodDeclaratorRest
     ;
 
 fieldDeclaration
@@ -309,18 +357,20 @@ type
 classOrInterfaceType
 	:	I1=Identifier {if(isExtends){ 
 	                          System.out.println("Ancestor classes:  "+$I1.text); isExtends=false;
-	                          finalExtraction = finalExtraction + "\n  Ancestor classes: "+$I1.text; } 
-	                       else 
-	                       if(isImp){
+	                          finalExtraction = finalExtraction + "\n  Ancestor classes: "+$I1.text; 
+	                       } 
+	                       else if(isImp){
 	                       	  System.out.println("implements "+$I1.text); isExtends=false;
 	                       	  isImp=false;
 	                       	  finalExtraction = finalExtraction + "\n  implements: "+$I1.text; 
 	                       } 
-	                       else
-	                       if(!isMethodMember){
+	                       else if(!isMethodMember){
 	                        System.out.print( $I1.text +" ");
 	                        finalExtraction = finalExtraction + "    "+$I1.text+" "; 
-	                        }
+	                        
+	                       }
+	                       
+	                        
 	                       }
 	         typeArguments? ('.' Identifier typeArguments? )* 
 	;
@@ -723,20 +773,22 @@ primary
     |   'super' superSuffix
     |   literal
     |   'new' creator
-    |   Identifier ('.' Identifier)* identifierSuffix?
+    |   Identifier {methodname = $Identifier.text;} trying 
     |   primitiveType ('[' ']')* '.' 'class'
     |   'void' '.' 'class'
     ;
-
+trying	
+    :   ('.' Identifier  {methodname+= '.'+ $Identifier.text; } )*    identifierSuffix?
+    ;	
 identifierSuffix
     :   ('[' ']')+ '.' 'class'
     |   ('[' expression ']')+ // can also be matched by selector, but do here
-    |   arguments
+    |   arguments { methodcalls.add(methodname); methodname ="";}
     |   '.' 'class'
     |   '.' explicitGenericInvocation
     |   '.' 'this'
     |   '.' 'super' arguments
-    |   '.' 'new' innerCreator
+    |   '.' 'new'  innerCreator
     ;
 
 creator
@@ -750,7 +802,7 @@ createdName
     ;
     
 innerCreator
-    :   nonWildcardTypeArguments? Identifier classCreatorRest
+    :   nonWildcardTypeArguments? Identifier classCreatorRest 
     ;
 
 arrayCreatorRest
@@ -775,14 +827,14 @@ nonWildcardTypeArguments
 selector
     :   '.' Identifier arguments?
     |   '.' 'this'
-    |   '.' 'super' superSuffix
+    |   '.' 'super' superSuffix 
     |   '.' 'new' innerCreator
     |   '[' expression ']'
     ;
     
 superSuffix
     :   arguments
-    |   '.' Identifier arguments?
+    |   '.' Identifier  {methodname = "super." + $Identifier.text; methodcalls.add(methodname); methodname="";} arguments?
     ;
 
 arguments
