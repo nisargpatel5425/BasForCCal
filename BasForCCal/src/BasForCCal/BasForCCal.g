@@ -10,10 +10,12 @@ int intCount=0;
 boolean isMethodMember = false, isDataMember = false;
 static String finalExtraction = "";
 static BufferedWriter writer;
-String methodname = "";
+String methodname = "",descendantname="",search="";
 ArrayList<String> methodcalls = new ArrayList<>();
-String key ="";
+ArrayList<String> descendants = new ArrayList<>();
+String key ="", ancestorkey="";
 Map<String,List<String>> map = new HashMap<>();
+Map<String,List<String>> ancestormap = new HashMap<>();
 boolean formalParameter=false;
 boolean variableDeclare=false;
 boolean isMethodVariable=false;
@@ -61,8 +63,8 @@ compilationUnit[String path]
 map.put(key,methodcalls);
      	for(Map.Entry<String, List<String>> entry : map.entrySet())
      	{	
-     		System.out.println("Method Calls:"+entry.getKey());
-     		finalExtraction = finalExtraction + ("\nMethod Calls:"+entry.getKey());
+     		System.out.println("Method Name:"+entry.getKey());
+     		finalExtraction = finalExtraction + ("\nMethod Name:"+entry.getKey());
      		for(String methodcall : entry.getValue())
      		{
      			System.out.println("\t"+methodcall);
@@ -78,6 +80,44 @@ map.put(key,methodcalls);
      			}
      		}
      	}
+     	
+     	search = "Descendants of" ;
+     	int in=0,count=0;
+     	 String newString = new String(); 
+     	   StringBuffer str = new StringBuffer(finalExtraction);
+     	  while (true) {
+           
+           in = finalExtraction.indexOf(search, in);
+               if (in != -1) {
+     	 	for(int i=0; i<finalExtraction.length();i++){
+     	 	
+           	if(in == i){
+           	  
+           		String cls = finalExtraction.substring(i + 15, finalExtraction.indexOf(":", i));
+           		
+            		int ind1 = i+15+cls.length()+1;
+          		if(ancestormap.containsKey(cls)){
+          		
+				str.insert(ind1, ancestormap.get(cls)); 
+				
+			}else{
+				str.insert(ind1, " No Descendants"); 
+				
+			}
+               		finalExtraction = str.toString();
+               
+            	}
+            	}
+            	count ++;
+                in += search.length();
+            	
+            	} else {
+                	break;
+            	}
+            	
+          
+        }
+     
         try{ 
 	        writer= new BufferedWriter(new FileWriter(path)); 
 	        finalExtraction = finalExtraction + "/n Aggregates:";
@@ -140,9 +180,10 @@ normalClassDeclaration
     :   'class' Identifier {System.out.println("Class:"+$Identifier.text); 
     			finalExtraction = finalExtraction + ("/n Class:"+$Identifier.text);
     			isMethodMember=false; isDataMember=false;isMethodVariable=false;} typeParameters?
-        ('extends' {isExtends=true;} type)?
+        ('extends' {isExtends=true; descendants = new ArrayList<>(); descendantname = $Identifier.text;} type)?
         ('implements'{isImp= true;} typeList)?
-        { if(!isDataMember){ isDataMember = true;  System.out.println(" Data Members: ");
+        { System.out.println(" Descendants of " +$Identifier.text+":");finalExtraction = finalExtraction + ("/n Descendants of "+$Identifier.text+":"); 
+         if(!isDataMember){isDataMember = true;  System.out.println(" Data Members: ");
         finalExtraction = finalExtraction + ("/n  Data Members: ");}}classBody
        
     ;
@@ -216,7 +257,7 @@ memberDecl
     |  { if(!isMethodMember){ isMethodMember = true;  System.out.println(" Method Members: ");
     				finalExtraction = finalExtraction + ("/n  Method Members: ");}}modifiers Identifier {System.out.print($Identifier.text);
     				finalExtraction = finalExtraction + $Identifier.text; } constructorDeclaratorRest
-    |  { if(!isMethodMember){ isMethodMember = true;  System.out.println(" Method Members: ");
+    				    |  { if(!isMethodMember){ isMethodMember = true;  System.out.println(" Method Members: ");
     				finalExtraction = finalExtraction + ("/n  Method Members: ");}}modifiers interfaceDeclaration
     |  { if(!isMethodMember){ isMethodMember = true;  System.out.println(" Method Members: ");
     				finalExtraction = finalExtraction + ("/n  Method Members: ");}}modifiers classDeclaration
@@ -282,7 +323,7 @@ voidMethodDeclaratorRest
     ;
     
 interfaceMethodDeclaratorRest
-    :   formalParameters ('[' ']')* ('throws' qualifiedNameList)? ';'
+    :   {formalParameter=true;} formalParameters ('[' ']')* ('throws' qualifiedNameList)? ';'
     ;
     
 interfaceGenericMethodDecl
@@ -291,11 +332,11 @@ interfaceGenericMethodDecl
     ;
     
 voidInterfaceMethodDeclaratorRest
-    :   formalParameters ('throws' qualifiedNameList)? ';'
+    :   {formalParameter=true;} formalParameters ('throws' qualifiedNameList)? ';'
     ;
     
 constructorDeclaratorRest
-    :   formalParameters ('throws' qualifiedNameList)? constructorBody
+    :   {formalParameter=true;} formalParameters ('throws' qualifiedNameList)? constructorBody
     ;
 
 constantDeclarator
@@ -366,7 +407,15 @@ type
 classOrInterfaceType
 	:	I1=Identifier {if(isExtends){ 
 	                          System.out.println("Ancestor classes:  "+$I1.text); isExtends=false;
-	                          finalExtraction = finalExtraction + "\n  Ancestor classes: "+$I1.text; } 
+	                          finalExtraction = finalExtraction + "\n  Ancestor classes: "+$I1.text;
+	                          ancestorkey = $I1.text;
+	                          if(ancestormap.containsKey(ancestorkey)){
+	                          	ancestormap.get(ancestorkey).add(descendantname);
+	                          }else{
+	                          	descendants.add(descendantname);
+	                          	ancestormap.put(ancestorkey,descendants);
+	                          }
+	                        } 
 	                       else if(isImp){
 	                       	  System.out.println("implements "+$I1.text); isExtends=false;
 	                       	  isImp=false;
