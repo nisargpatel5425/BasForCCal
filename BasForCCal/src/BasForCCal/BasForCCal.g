@@ -7,6 +7,7 @@ import java.io.*;
 @members{
 boolean isExtends=false, isImp=false;
 int intCount=0;
+int methodCount = 0;
 boolean isMethodMember = false, isDataMember = false,isClassObject= false;
 static String finalExtraction = "";
 static BufferedWriter writer;
@@ -29,12 +30,14 @@ public void printData(List<String> str, String tabs)
      			System.out.println(tabs+ " ->"+methodcall);
      			finalExtraction = finalExtraction + tabs +( "\n \t ->"+methodcall);
      			String[] arr = methodcall.split("\\.");
-     			if(arr.length!= 0 &&map.containsKey(arr[arr.length - 1]))
+     			if(arr.length!= 0 &&map.containsKey(arr[arr.length - 1]) && methodCount ==0)
      			{
+     				methodCount =1;
      				printData(map.get(arr[arr.length - 1]), tabs+"\t");
      			}
-     			else if(map.containsKey(methodcall))
+     			else if(map.containsKey(methodcall)&& methodCount ==0)
      			{
+     				methodCount =1;
      				printData(map.get(methodcall), tabs+"\t");
      			}
      		}
@@ -63,8 +66,8 @@ compilationUnit[String path]
 map.put(key,methodcalls);
      	for(Map.Entry<String, List<String>> entry : map.entrySet())
      	{	
-     		System.out.println("Method Name:"+entry.getKey());
-     		finalExtraction = finalExtraction + ("\nMethod Name:"+entry.getKey());
+     		System.out.println("Method Calls:"+entry.getKey());
+     		finalExtraction = finalExtraction + ("\nMethod Calls:"+entry.getKey());
      		for(String methodcall : entry.getValue())
      		{
      			System.out.println("\t"+methodcall);
@@ -156,9 +159,9 @@ classOrInterfaceModifiers
 
 classOrInterfaceModifier
     :   annotation   // class or interface
-    |   'public' {System.out.print("  public "); finalExtraction = finalExtraction + "  public ";}
-    |   'protected' {System.out.print("  protected "); finalExtraction = finalExtraction + "  protected ";}
-    |   'private' {System.out.print("  private "); finalExtraction = finalExtraction + "  private ";}
+    |   'public' {System.out.println("  public "); finalExtraction = finalExtraction + "\n  public ";}
+    |   'protected' {System.out.println("  protected "); finalExtraction = finalExtraction + "\n  protected ";}
+    |   'private' {System.out.println("  private "); finalExtraction = finalExtraction + "\n  private ";}
     |   'static' {System.out.print("  static "); finalExtraction = finalExtraction + "  static ";}
     |   'abstract' {System.out.print("  abstract "); finalExtraction = finalExtraction + " abstract ";}
     |   'final' {System.out.print("  final "); finalExtraction = finalExtraction + "  final ";}
@@ -267,7 +270,7 @@ memberDeclaration
     ;
 
 genericMethodOrConstructorDecl
-    :   typeParameters genericMethodOrConstructorRest
+    :    typeParameters genericMethodOrConstructorRest
     ;
     
 genericMethodOrConstructorRest
@@ -496,7 +499,7 @@ formalParameters
     ;
     
 formalParameterDecls
-    :   {formalParameter = true;} variableModifiers type formalParameterDeclsRest
+    :   {formalParameter = true;isClassObject = true;} variableModifiers type formalParameterDeclsRest
     ;
     
 formalParameterDeclsRest
@@ -506,7 +509,7 @@ formalParameterDeclsRest
     ;
     
 methodBody
-    :  {if(isMethodMember){isMethodVariable = true;isClassObject = true;}} block
+    :  {if(!isMethodMember){isMethodVariable = true;}isClassObject = true;} block
     ;
 
 constructorBody
