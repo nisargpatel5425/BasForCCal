@@ -25,7 +25,7 @@ public void printData(List<String> str, String tabs)
      		for(String methodcall : str)
      		{
      			System.out.println(tabs+ " ->"+methodcall);
-     			finalExtraction = finalExtraction + tabs +( "\n ->"+methodcall);
+     			finalExtraction = finalExtraction + tabs +( "\n \t ->"+methodcall);
      			String[] arr = methodcall.split("\\.");
      			if(arr.length!= 0 &&map.containsKey(arr[arr.length - 1]))
      			{
@@ -61,8 +61,8 @@ compilationUnit[String path]
 map.put(key,methodcalls);
      	for(Map.Entry<String, List<String>> entry : map.entrySet())
      	{	
-     		System.out.println("Method Name:"+entry.getKey());
-     		finalExtraction = finalExtraction + ("\nMethod Name:"+entry.getKey());
+     		System.out.println("Method Calls:"+entry.getKey());
+     		finalExtraction = finalExtraction + ("\nMethod Calls:"+entry.getKey());
      		for(String methodcall : entry.getValue())
      		{
      			System.out.println("\t"+methodcall);
