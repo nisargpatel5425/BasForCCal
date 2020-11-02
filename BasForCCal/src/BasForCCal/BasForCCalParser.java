@@ -1,4 +1,4 @@
-// $ANTLR 3.5.1 C:\\Users\\kjdes\\OneDrive\\Documents\\NetBeansProjects\\BasForCCal_New\\BasForCCal\\BasForCCal\\src\\BasForCCal\\BasForCCal.g 2020-10-28 17:31:00
+// $ANTLR 3.5.1 C:\\Users\\kjdes\\OneDrive\\Documents\\NetBeansProjects\\BasForCCal_New\\BasForCCal\\BasForCCal\\src\\BasForCCal\\BasForCCal.g 2020-10-28 18:58:39
 
 package BasForCCal;
 import java.io.*;
@@ -4027,12 +4027,12 @@ public class BasForCCalParser extends Parser {
 			// C:\\Users\\kjdes\\OneDrive\\Documents\\NetBeansProjects\\BasForCCal_New\\BasForCCal\\BasForCCal\\src\\BasForCCal\\BasForCCal.g:349:9: Identifier variableDeclaratorId ( '=' variableInitializer )?
 			{
 			Identifier10=(Token)match(input,Identifier,FOLLOW_Identifier_in_variableDeclarator1759); if (state.failed) return;
-			if ( state.backtracking==0 ) {isClassObject= false;System.out.println((Identifier10!=null?Identifier10.getText():null)+"\n");finalExtraction = finalExtraction + ((Identifier10!=null?Identifier10.getText():null)+"\n" );}
+			if ( state.backtracking==0 ) {isClassObject= false;System.out.print((Identifier10!=null?Identifier10.getText():null)+"\n");finalExtraction = finalExtraction + ((Identifier10!=null?Identifier10.getText():null)+" " );}
 			pushFollow(FOLLOW_variableDeclaratorId_in_variableDeclarator1763);
 			variableDeclaratorId();
 			state._fsp--;
 			if (state.failed) return;
-			// C:\\Users\\kjdes\\OneDrive\\Documents\\NetBeansProjects\\BasForCCal_New\\BasForCCal\\BasForCCal\\src\\BasForCCal\\BasForCCal.g:349:169: ( '=' variableInitializer )?
+			// C:\\Users\\kjdes\\OneDrive\\Documents\\NetBeansProjects\\BasForCCal_New\\BasForCCal\\BasForCCal\\src\\BasForCCal\\BasForCCal.g:349:166: ( '=' variableInitializer )?
 			int alt58=2;
 			int LA58_0 = input.LA(1);
 			if ( (LA58_0==50) ) {
@@ -4040,7 +4040,7 @@ public class BasForCCalParser extends Parser {
 			}
 			switch (alt58) {
 				case 1 :
-					// C:\\Users\\kjdes\\OneDrive\\Documents\\NetBeansProjects\\BasForCCal_New\\BasForCCal\\BasForCCal\\src\\BasForCCal\\BasForCCal.g:349:170: '=' variableInitializer
+					// C:\\Users\\kjdes\\OneDrive\\Documents\\NetBeansProjects\\BasForCCal_New\\BasForCCal\\BasForCCal\\src\\BasForCCal\\BasForCCal.g:349:167: '=' variableInitializer
 					{
 					match(input,50,FOLLOW_50_in_variableDeclarator1767); if (state.failed) return;
 					pushFollow(FOLLOW_variableInitializer_in_variableDeclarator1769);

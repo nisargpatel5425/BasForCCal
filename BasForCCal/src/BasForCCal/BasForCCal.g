@@ -346,7 +346,7 @@ variableDeclarators
     ;
 
 variableDeclarator
-    :   Identifier {isClassObject= false;System.out.println($Identifier.text+"\n");finalExtraction = finalExtraction + ($Identifier.text+"\n" );} variableDeclaratorId  ('=' variableInitializer)?
+    :   Identifier {isClassObject= false;System.out.print($Identifier.text+"\n");finalExtraction = finalExtraction + ($Identifier.text+" " );} variableDeclaratorId  ('=' variableInitializer)?
     ;
     
 constantDeclaratorsRest
