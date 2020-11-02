@@ -11,18 +11,19 @@ int methodCount = 0;
 boolean isMethodMember = false, isDataMember = false,isClassObject= false;
 static String finalExtraction = "";
 static BufferedWriter writer;
-String methodname = "",descendantname="",search="";
+String methodname = "",descendantname="",search="",search1="";
 ArrayList<String> methodcalls = new ArrayList<>();
 ArrayList<String> descendants = new ArrayList<>();
-String key ="", ancestorkey="";
+ArrayList<String> ancestors = new ArrayList<>();
+String key ="", descendantkey="", ancestorkey="";
 Map<String,List<String>> map = new HashMap<>();
-Map<String,List<String>> ancestormap = new HashMap<>();
+Map<String,List<String>> descendantmap = new HashMap<>();
+static Map<String,List<String>> ancestormap = new HashMap<>();
 boolean formalParameter=false;
 boolean variableDeclare=false;
 boolean isMethodVariable=false;
 ArrayList<String> aggregates = new ArrayList<String>();
 ArrayList<String> associates = new ArrayList<String>();
-ArrayList<Integer> indices = new ArrayList<>();
 
 public void printData(List<String> str, String tabs)
      	{
@@ -99,9 +100,9 @@ map.put(key,methodcalls);
            		String cls = finalExtraction.substring(i + 15, finalExtraction.indexOf(":", i));
            		
             		int ind1 = i+15+cls.length()+1;
-          		if(ancestormap.containsKey(cls)){
+          		if(descendantmap.containsKey(cls)){
           		
-				str.insert(ind1, ancestormap.get(cls)); 
+				str.insert(ind1, descendantmap.get(cls)); 
 				
 			}
                		finalExtraction = str.toString();
@@ -115,6 +116,7 @@ map.put(key,methodcalls);
                 	break;
             	}   
         }
+        
      
         try{ 
 	        writer= new BufferedWriter(new FileWriter(path)); 
@@ -178,9 +180,10 @@ normalClassDeclaration
     :   'class' Identifier {System.out.print("Class:"+$Identifier.text); 
     			finalExtraction = finalExtraction + ("Class:"+$Identifier.text);
     			isMethodMember=false; isDataMember=false;isMethodVariable=false;isClassObject = false;} typeParameters?
-        ('extends' {isExtends=true; descendants = new ArrayList<>(); descendantname = $Identifier.text;} type)?
+        ('extends' {isExtends=true; descendants = new ArrayList<>(); ancestors = new ArrayList<>();
+        descendantname = $Identifier.text; ancestorkey = $Identifier.text;} type)?
         ('implements'{isImp= true;} typeList)?
-        { System.out.println(" Descendants of " +$Identifier.text+":");finalExtraction = finalExtraction + ("\n Descendants of "+$Identifier.text+":"); 
+        { System.out.println("  Descendants of " +$Identifier.text+":");finalExtraction = finalExtraction + ("\n  Descendants of "+$Identifier.text+":");
          if(!isDataMember){isDataMember = true;  System.out.println(" Data Members: ");
         finalExtraction = finalExtraction + ("\n  Data Members: \n");}}classBody
        
@@ -404,14 +407,24 @@ type
 
 classOrInterfaceType
 	:	I1=Identifier {if(isExtends){ 
-	                          System.out.println("Ancestor classes:  "+$I1.text); isExtends=false;
-	                          finalExtraction = finalExtraction + "\n  Ancestor classes: "+$I1.text;
-	                          ancestorkey = $I1.text;
-	                          if(ancestormap.containsKey(ancestorkey)){
-	                          	ancestormap.get(ancestorkey).add(descendantname);
+		                      
+	                    	ancestors.add($I1.text);
+	                       if(ancestormap.containsKey($I1.text)){
+	                       		ancestors.addAll(ancestormap.get($I1.text));
+	                       		ancestormap.put(ancestorkey,ancestors);
+	                       	}else{
+	                       		System.out.println("Ancestors else:"+ ancestors);
+	                       		ancestormap.put(ancestorkey,ancestors);
+	                       	}
+	                       System.out.println("Ancestor classes:  "+ ancestors); 
+	                      	finalExtraction = finalExtraction + "\n  Ancestor classes: "+ancestors;
+	                      	isExtends=false;
+	                          descendantkey = $I1.text;
+	                          if(descendantmap.containsKey(descendantkey)){
+	                          	descendantmap.get(descendantkey).add(descendantname);
 	                          }else{
 	                          	descendants.add(descendantname);
-	                          	ancestormap.put(ancestorkey,descendants);
+	                          	descendantmap.put(descendantkey,descendants);
 	                          }
 	                        } 
 	                       else if(isImp){
