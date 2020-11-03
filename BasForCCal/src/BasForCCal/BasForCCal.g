@@ -128,11 +128,13 @@ map.put(key,methodcalls);
 	        for (String ass: associates) {
         	     finalExtraction = finalExtraction + "/n"+ass;
         	    }
+        	finalExtraction = finalExtraction + "/n /n";
 		String[] words = finalExtraction.split("/n");
         	for (String word: words) {
         	     writer.write(word);
         	     writer.newLine();
         	    }
+        	    
       		writer.close();
       		}catch(Exception ex){}}; 
 packageDeclaration
