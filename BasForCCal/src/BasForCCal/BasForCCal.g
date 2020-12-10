@@ -411,14 +411,13 @@ classOrInterfaceType
 	:	I1=Identifier {if(isExtends){ 
 		                      
 	                    	ancestors.add($I1.text);
-	                       if(ancestormap.containsKey($I1.text)){
+	                        if(ancestormap.containsKey($I1.text)){
 	                       		ancestors.addAll(ancestormap.get($I1.text));
 	                       		ancestormap.put(ancestorkey,ancestors);
 	                       	}else{
-	                       		System.out.println("Ancestors else:"+ ancestors);
 	                       		ancestormap.put(ancestorkey,ancestors);
 	                       	}
-	                       System.out.println("Ancestor classes:  "+ ancestors); 
+	                       	System.out.println("Ancestor classes:  "+ ancestors); 
 	                      	finalExtraction = finalExtraction + "\n  Ancestor classes: "+ancestors;
 	                      	isExtends=false;
 	                          descendantkey = $I1.text;
