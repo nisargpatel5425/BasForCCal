@@ -59,12 +59,12 @@ package BasForCCal;
 // starting point for parsing a java file
 /* The annotations are separated out to make parsing faster, but must be associated with
    a packageDeclaration or a typeDeclaration (and not an empty one). */
-compilationUnit[String path]
+compilationUnit[String path,boolean flag]
     :   annotations
         (   packageDeclaration importDeclaration* typeDeclaration*
         |   classOrInterfaceDeclaration typeDeclaration*
         )
-    |   packageDeclaration? importDeclaration* typeDeclaration*
+    |   {if(flag == true) finalExtraction = ""; }packageDeclaration? importDeclaration* typeDeclaration*
 
      	{
 map.put(key,methodcalls);
