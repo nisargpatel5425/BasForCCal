@@ -24,6 +24,8 @@ boolean variableDeclare=false;
 boolean isMethodVariable=false;
 ArrayList<String> aggregates = new ArrayList<String>();
 ArrayList<String> associates = new ArrayList<String>();
+static ArrayList<ModelClass> classesmodel = new ArrayList<ModelClass>();
+ModelClass m;
 
 public void printData(List<String> str, String tabs)
      	{
@@ -116,7 +118,7 @@ map.put(key,methodcalls);
                 	break;
             	}   
         }
-        
+          	
      
         try{ 
 	        writer= new BufferedWriter(new FileWriter(path)); 
@@ -181,7 +183,9 @@ classDeclaration
 normalClassDeclaration
     :   'class' Identifier {System.out.print("Class:"+$Identifier.text); 
     			finalExtraction = finalExtraction + ("Class:"+$Identifier.text);
-    			isMethodMember=false; isDataMember=false;isMethodVariable=false;isClassObject = false;} typeParameters?
+    			isMethodMember=false; isDataMember=false;isMethodVariable=false;isClassObject = false;
+    			m = new ModelClass();
+    			m.className = $Identifier.text;} typeParameters?
         ('extends' {isExtends=true; descendants = new ArrayList<>(); ancestors = new ArrayList<>();
         descendantname = $Identifier.text; ancestorkey = $Identifier.text;} type)?
         ('implements'{isImp= true;} typeList)?
@@ -417,6 +421,9 @@ classOrInterfaceType
 	                       	}else{
 	                       		ancestormap.put(ancestorkey,ancestors);
 	                       	}
+	                       	m.setAncestors(ancestors);
+	                       	classesmodel.add(m);
+	                     
 	                       	System.out.println("Ancestor classes:  "+ ancestors); 
 	                      	finalExtraction = finalExtraction + "\n  Ancestor classes: "+ancestors;
 	                      	isExtends=false;
@@ -427,6 +434,7 @@ classOrInterfaceType
 	                          	descendants.add(descendantname);
 	                          	descendantmap.put(descendantkey,descendants);
 	                          }
+	                          
 	                        } 
 	                       else if(isImp){
 	                       	  System.out.println("implements "+$I1.text); isExtends=false;
