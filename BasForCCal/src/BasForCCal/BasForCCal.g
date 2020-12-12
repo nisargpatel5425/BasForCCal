@@ -24,7 +24,9 @@ boolean variableDeclare=false;
 boolean isMethodVariable=false;
 ArrayList<String> aggregates = new ArrayList<String>();
 ArrayList<String> associates = new ArrayList<String>();
-static ArrayList<ModelClass> classesmodel = new ArrayList<ModelClass>();
+static ArrayList<ModelClass> premaint = new ArrayList<ModelClass>();
+static ArrayList<ModelClass> postmaint = new ArrayList<ModelClass>();
+ArrayList<ModelClass> classmodel = new ArrayList<ModelClass>();
 ModelClass m;
 
 public void printData(List<String> str, String tabs)
@@ -59,7 +61,7 @@ package BasForCCal;
 // starting point for parsing a java file
 /* The annotations are separated out to make parsing faster, but must be associated with
    a packageDeclaration or a typeDeclaration (and not an empty one). */
-compilationUnit[String path,boolean flag]
+compilationUnit[String path, boolean flag, boolean isPost]
     :   annotations
         (   packageDeclaration importDeclaration* typeDeclaration*
         |   classOrInterfaceDeclaration typeDeclaration*
@@ -87,7 +89,7 @@ map.put(key,methodcalls);
      			}
      		}
      	}
-     	
+     	classmodel.add(m);
      	search = "Descendants of" ;
      	int in=0,count=0;
      	StringBuffer str = new StringBuffer(finalExtraction);
@@ -134,10 +136,17 @@ map.put(key,methodcalls);
 		String[] words = finalExtraction.split("/n");
         	for (String word: words) {
         	     writer.write(word);
-        	     writer.newLine();
+        	             	     writer.newLine();
         	    }
         	    
       		writer.close();
+      		
+      		if(isPost){
+      			postmaint.addAll(classmodel);
+      			System.out.println("hiii"+postmaint.get(0).getClassName());
+      		}else{
+      			premaint.addAll(classmodel);
+      		}
       		}catch(Exception ex){}}; 
 packageDeclaration
     :   'package' qualifiedName ';'
@@ -422,7 +431,7 @@ classOrInterfaceType
 	                       		ancestormap.put(ancestorkey,ancestors);
 	                       	}
 	                       	m.setAncestors(ancestors);
-	                       	classesmodel.add(m);
+	                       	
 	                     
 	                       	System.out.println("Ancestor classes:  "+ ancestors); 
 	                      	finalExtraction = finalExtraction + "\n  Ancestor classes: "+ancestors;

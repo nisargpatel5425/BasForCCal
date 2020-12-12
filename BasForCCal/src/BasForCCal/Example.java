@@ -11,12 +11,13 @@ import org.antlr.runtime.RecognitionException;
  */
 public class Example {
 
-	public static void parseProg(String args,String path,boolean flag)throws IOException, RecognitionException  {
+	public static void parseProg(String args,String path,boolean flag, boolean isPost)throws IOException, RecognitionException  {
 
 		BasForCCalLexer lexer = new BasForCCalLexer(new ANTLRFileStream(args));
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		BasForCCalParser parser = new BasForCCalParser(tokens);
-		parser.compilationUnit(path,flag);
+                System.out.println("flag value"+flag);
+		parser.compilationUnit(path,flag, isPost);
 		args="";
 	}
 
