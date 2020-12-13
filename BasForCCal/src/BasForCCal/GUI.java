@@ -194,6 +194,7 @@ public class GUI extends JFrame implements ActionListener {
                            
                             System.out.println("Classname :  " + premaint.get(i).getClassName());
                             System.out.println("Ancestor :  " + premaint.get(i).getAncestors());
+                            System.out.println("Methodsss :  " + premaint.get(i).getMethodMember());
                         }
                     }
                       System.out.println("Post Maintenance : ");
@@ -202,6 +203,7 @@ public class GUI extends JFrame implements ActionListener {
                           
                             System.out.println("Classname :  " + postmaint.get(i).getClassName());
                             System.out.println("Ancestor :  " + postmaint.get(i).getAncestors());
+                            System.out.println("Methodsss :  " + postmaint.get(i).getMethodMember());
                         }
                     }
                 } catch (IOException e1) {

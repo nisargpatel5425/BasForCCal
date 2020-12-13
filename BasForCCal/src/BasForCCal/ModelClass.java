@@ -17,6 +17,7 @@ public class ModelClass {
     ArrayList<String> descendants;
     String className;
     HashMap<String, String> variables;
+    ArrayList<String> methodMember;
 
     public ArrayList<String> getDescendants() {
         return descendants;
@@ -48,5 +49,13 @@ public class ModelClass {
 
     public void setAncestors(ArrayList<String> ancestors) {
         this.ancestors = ancestors;
+    }
+
+    public ArrayList<String> getMethodMember() {
+        return methodMember;
+    }
+
+    public void setMethodMember(ArrayList<String> methodMember) {
+        this.methodMember = methodMember;
     }
 }
