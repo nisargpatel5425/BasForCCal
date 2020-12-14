@@ -34,7 +34,7 @@ public class GUI extends JFrame implements ActionListener {
     static int result;
     static JFrame f;
     static JTextArea t1, t2, t3;
-    static String folderPath = "/Users/suhas/Desktop/CECS547/Project/";
+    static String folderPath = "C:\\Users\\kjdes\\Documents\\CECS547\\";
     JMenuBar jMenubar;
     JMenu jMenuFile;
     JMenu jMenuCompare;
