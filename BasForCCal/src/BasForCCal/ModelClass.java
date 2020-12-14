@@ -16,8 +16,16 @@ public class ModelClass {
     ArrayList<String> ancestors;
     ArrayList<String> descendants;
     String className;
-    HashMap<String, String> variables;
+    ArrayList<String> dataMembers;
     ArrayList<String> methodMember;
+
+    public ArrayList<String> getDataMembers() {
+        return dataMembers;
+    }
+
+    public void setDataMembers(ArrayList<String> dataMembers) {
+        this.dataMembers = dataMembers;
+    }
 
     public ArrayList<String> getDescendants() {
         return descendants;
@@ -35,13 +43,6 @@ public class ModelClass {
         this.className = className;
     }
 
-    public HashMap<String, String> getVariables() {
-        return variables;
-    }
-
-    public void setVariables(HashMap<String, String> variables) {
-        this.variables = variables;
-    }
 
     public ArrayList<String> getAncestors() {
         return ancestors;

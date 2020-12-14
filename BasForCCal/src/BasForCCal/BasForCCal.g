@@ -24,6 +24,8 @@ boolean variableDeclare=false;
 boolean isMethodVariable=false;
 ArrayList<String> aggregates = new ArrayList<String>();
 ArrayList<String> associates = new ArrayList<String>();
+ArrayList<String> dataMembers = new ArrayList<String>();
+String datamem = "";
 static ArrayList<ModelClass> premaint = new ArrayList<ModelClass>();
 static ArrayList<ModelClass> postmaint = new ArrayList<ModelClass>();
 ArrayList<ModelClass> classmodel = new ArrayList<ModelClass>();
@@ -73,6 +75,8 @@ compilationUnit[String path, boolean flag, boolean isPost]
      	{
 map.put(key,methodcalls);
 m.setMethodMember(methodnamelist);
+m.setDataMembers(dataMembers);
+classmodel.add(m);
      	for(Map.Entry<String, List<String>> entry : map.entrySet())
      	{	
      		System.out.println("Method Calls:"+entry.getKey());
@@ -92,7 +96,7 @@ m.setMethodMember(methodnamelist);
      			}
      		}
      	}
-     	classmodel.add(m);
+     	
      	search = "Descendants of" ;
      	int in=0,count=0;
      	StringBuffer str = new StringBuffer(finalExtraction);
@@ -363,11 +367,12 @@ constantDeclarator
     ;
     
 variableDeclarators
-    :   variableDeclarator (',' {System.out.print(", "); finalExtraction = finalExtraction + ", " ;} variableDeclarator)* 
+    :   variableDeclarator (',' {System.out.print(", "); finalExtraction = finalExtraction + ", " ; } variableDeclarator)* 
     ;
 
 variableDeclarator
-    :   Identifier {isClassObject= false;System.out.print($Identifier.text+"\n");finalExtraction = finalExtraction + ($Identifier.text+" " );} variableDeclaratorId  ('=' variableInitializer)?
+    :   Identifier {isClassObject= false;System.out.print($Identifier.text+"\n");finalExtraction = finalExtraction + ($Identifier.text+" " );
+    datamem = datamem + $Identifier.text;dataMembers.add(datamem); datamem="";} variableDeclaratorId ('=' variableInitializer)?
     ;
     
 constantDeclaratorsRest
@@ -393,18 +398,20 @@ arrayInitializer
 
 modifier
     :   annotation
-    |   'public' {System.out.print("  public "); finalExtraction = finalExtraction + "  public ";  methodName += "public ";}
-    |   'protected' {System.out.print("  protected "); finalExtraction = finalExtraction + "  protected "; methodName+="protected ";}
-    |   'private' {System.out.print("  private "); finalExtraction = finalExtraction + "  private "; methodName+="private ";}
-    |   'static' {System.out.print("  static "); finalExtraction = finalExtraction + "  static ";  methodName+=" static ";}
-    |   'abstract' {System.out.print("  abstract "); finalExtraction = finalExtraction + " abstract "; methodName+=" abstract ";}
-    |   'final' {System.out.print("  final "); finalExtraction = finalExtraction + "  final "; methodName+="final ";}
-    |   'native' {System.out.print("  native "); finalExtraction = finalExtraction + "  native "; methodName+="native ";}
-    |   'synchronized' {System.out.print("  synchronized "); finalExtraction = finalExtraction + "  synchronized "; methodName+="synchronized ";}
-    |   'transient' {System.out.print("  transient "); finalExtraction = finalExtraction + "  transient "; methodName+="transient "; }
-    |   'volatile' {System.out.print("  volatile "); finalExtraction = finalExtraction + "  volatile "; methodName+="volatile ";}
-    |   'strictfp' {System.out.print("  strictfp "); finalExtraction = finalExtraction + "  strictfp "; methodName+=" strictfp ";}
+    |   'public' {System.out.print("  public "); finalExtraction = finalExtraction + "  public ";  methodName += "public ";  datamem += "public ";}
+    |   'protected' {System.out.print("  protected "); finalExtraction = finalExtraction + "  protected "; methodName+="protected "; datamem+="protected ";}
+    |   'private' {System.out.print("  private "); finalExtraction = finalExtraction + "  private "; methodName+="private ";datamem+="private ";}
+    |   'static' {System.out.print("  static "); finalExtraction = finalExtraction + "  static ";  methodName+=" static ";datamem+=" static ";}
+    |   'abstract' {System.out.print("  abstract "); finalExtraction = finalExtraction + " abstract "; methodName+=" abstract ";datamem+=" abstract ";}
+    |   'final' {System.out.print("  final "); finalExtraction = finalExtraction + "  final "; methodName+=" final ";datamem+=" final ";}
+    |   'native' {System.out.print("  native "); finalExtraction = finalExtraction + "  native "; methodName+="native ";datamem+="native ";}
+    |   'synchronized' {System.out.print("  synchronized "); finalExtraction = finalExtraction + "  synchronized "; methodName+="synchronized ";datamem+="synchronized ";}
+    |   'transient' {System.out.print("  transient "); finalExtraction = finalExtraction + "  transient "; methodName+="transient ";datamem +="transient ";}
+    |   'volatile' {System.out.print("  volatile "); finalExtraction = finalExtraction + "  volatile "; methodName+="volatile ";datamem+="volatile ";}
+    |   'strictfp' {System.out.print("  strictfp "); finalExtraction = finalExtraction + "  strictfp "; methodName+=" strictfp ";datamem+=" strictfp ";}
     ;
+
+    
 
 packageOrTypeName
     :   qualifiedName
@@ -461,8 +468,10 @@ classOrInterfaceType
 		                       if(!isMethodVariable)
 		                       {
 			                       if(isClassObject){
+						
 			                        System.out.print( $I1.text +" ");
 			                        finalExtraction = finalExtraction + "    "+$I1.text+" "; 
+			                        datamem = $I1.text+" ";
 			                        isClassObject = false;
 			                       }
 		                        }
@@ -477,34 +486,34 @@ classOrInterfaceType
 	                        }
 	                       
 	                       }
-	         typeArguments? ('.' Identifier  typeArguments? )* 
+	         typeArguments? ('.' Identifier typeArguments? )* 
 	;
 
 primitiveType
     :   'boolean' {if(isMethodVariable){  System.out.println("Local variable: ");
 	                       finalExtraction = finalExtraction + "Local Variables:  \n"; 
-	                       isMethodVariable = false; }{System.out.print("boolean "); methodName+="boolean "; finalExtraction = finalExtraction + "boolean ";}}
+	                       isMethodVariable = false; }{System.out.print("boolean "); methodName+="boolean ";datamem+="boolean "; finalExtraction = finalExtraction + "boolean ";}}
     |   'char' {if(isMethodVariable){  System.out.println("Local variable: ");
 	                       finalExtraction = finalExtraction + "Local Variables:  \n"; 
-	                       isMethodVariable = false;}{System.out.print("char "); methodName+="char "; finalExtraction = finalExtraction + "char ";}}
+	                       isMethodVariable = false;}{System.out.print("char "); methodName+="char ";datamem+="char "; finalExtraction = finalExtraction + "char ";}}
     |   'byte' {if(isMethodVariable){  System.out.println("Local variable: ");
 	                       finalExtraction = finalExtraction + "Local Variables:  \n"; 
-	                       isMethodVariable = false;}{System.out.print("byte "); methodName+="byte "; finalExtraction = finalExtraction + "byte ";}}
+	                       isMethodVariable = false;}{System.out.print("byte "); methodName+="byte ";datamem+="byte "; finalExtraction = finalExtraction + "byte ";}}
     |   'short' {if(isMethodVariable){  System.out.println("Local variable: ");
 	                       finalExtraction = finalExtraction + "Local Variables:  \n"; 
-	                       isMethodVariable = false;}{System.out.print("short "); methodName+="short "; finalExtraction = finalExtraction + "short ";}}
+	                       isMethodVariable = false;}{System.out.print("short "); methodName+="short ";datamem+="short "; finalExtraction = finalExtraction + "short ";}}
     |   'int'  {if(isMethodVariable){  System.out.println("Local variable: ");
 	                       finalExtraction = finalExtraction + "Local Variables:  \n"; 
-	                       isMethodVariable = false;}{System.out.print("int "); methodName+="int "; intCount++;finalExtraction = finalExtraction + "int ";}}
+	                       isMethodVariable = false;}{System.out.print("int "); methodName+="int ";datamem+="int "; intCount++;finalExtraction = finalExtraction + "int ";}}
     |   'long' {if(isMethodVariable){  System.out.println("Local variable: ");
 	                       finalExtraction = finalExtraction + "Local Variables:  \n"; 
-	                       isMethodVariable = false;}{System.out.print("long "); methodName+="long "; finalExtraction = finalExtraction + "long ";}}
+	                       isMethodVariable = false;}{System.out.print("long "); methodName+="long ";datamem+="long "; finalExtraction = finalExtraction + "long ";}}
     |   'float' {if(isMethodVariable){  System.out.println("Local variable: ");
 	                       finalExtraction = finalExtraction + "Local Variables:  \n"; 
-	                       isMethodVariable = false;}{System.out.print("float "); methodName+="float "; finalExtraction = finalExtraction + "float ";}}
+	                       isMethodVariable = false;}{System.out.print("float "); methodName+="float ";datamem+="float "; finalExtraction = finalExtraction + "float ";}}
     |   'double' {if(isMethodVariable){  System.out.println("Local variable: ");
 	                       finalExtraction = finalExtraction + "Local Variables:  \n"; 
-	                       isMethodVariable = false;}{System.out.print("double "); methodName+="double "; finalExtraction = finalExtraction + "double ";}}
+	                       isMethodVariable = false;}{System.out.print("double "); methodName+="double ";datamem+="double "; finalExtraction = finalExtraction + "double ";}}
     ;
 
 variableModifier

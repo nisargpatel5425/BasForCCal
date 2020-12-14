@@ -5,18 +5,24 @@ import static BasForCCal.BasForCCalParser.premaint;
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultStyledDocument;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
+import javax.swing.text.StyledDocument;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 import org.antlr.runtime.RecognitionException;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -25,15 +31,17 @@ import java.util.Random;
  */
 public class GUI extends JFrame implements ActionListener {
 
+    static int result;
     static JFrame f;
     static JTextArea t1, t2, t3;
-    static String folderPath = "C:\\Users\\kjdes\\Documents\\CECS547\\Project";
+    static String folderPath = "/Users/suhas/Desktop/CECS547/Project/";
     JMenuBar jMenubar;
     JMenu jMenuFile;
     JMenu jMenuCompare;
     JMenuItem jOpen;
     JMenuItem jOpenCompared;
     JTextArea jTextArea;
+    JTextPane textPane;
     JTree tree;
     DefaultMutableTreeNode root = new DefaultMutableTreeNode("root", true);
     JPanel p1 = new JPanel();
@@ -42,6 +50,7 @@ public class GUI extends JFrame implements ActionListener {
     JPanel ptext2 = new JPanel();
     JPanel ptext3 = new JPanel();
     JPanel ptree = new JPanel();
+    StyledDocument document;
 
     GUI() {
 
@@ -65,7 +74,7 @@ public class GUI extends JFrame implements ActionListener {
     }
     //Reference End: https://www.rgagnon.com/javadetails/java-0324.html
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws BadLocationException {
 
         f = new JFrame("frame");
 
@@ -88,7 +97,8 @@ public class GUI extends JFrame implements ActionListener {
         t3 = new JTextArea(50, 50);
         t2 = new JTextArea(50, 50);
         s.ptree.setSize(500, 100);
-
+        s.textPane = new JTextPane();
+        s.textPane.setSize(50, 50);
         s.add(s.jMenubar);
 
         File fileRoot = new File(folderPath);
@@ -127,11 +137,25 @@ public class GUI extends JFrame implements ActionListener {
             }
 
         });
-        s.ptext1.add(t1);
+        s.ptext1.add(t1).setBackground(Color.LIGHT_GRAY);;
         s.ptext2.add(t2);
         s.ptext3.add(t3);
+
+        StyleContext context = new StyleContext();
+        s.document = new DefaultStyledDocument(context);
+
+        Style style = context.getStyle(StyleContext.DEFAULT_STYLE);
+
+        StyleConstants.setForeground(style, Color.GREEN);
+        s.document.insertString(s.document.getLength(), "java2s.com", style);
+
+        StyleConstants.setForeground(style, Color.RED);
+        s.document.insertString(s.document.getLength(), "fa.com", style);
+        s.textPane = new JTextPane(s.document);
+        s.textPane.setEditable(false);
+
         JSplitPane s3 = new JSplitPane(SwingConstants.VERTICAL, new JScrollPane(s.ptext1), new JScrollPane(s.ptext2));
-        JSplitPane s4 = new JSplitPane(SwingConstants.HORIZONTAL, new JScrollPane(s3), new JScrollPane(s.ptext3));
+        JSplitPane s4 = new JSplitPane(SwingConstants.HORIZONTAL, new JScrollPane(s3), new JScrollPane(s.textPane));
         JSplitPane s2 = new JSplitPane(SwingConstants.VERTICAL, new JScrollPane(s.ptree), s4);
         s.p2.add(s2);
         JSplitPane sl = new JSplitPane(SwingConstants.HORIZONTAL, s.p1, s.p2);
@@ -154,17 +178,23 @@ public class GUI extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Example example;
         Path path;
+        String folder = "";
         if (e.getSource() == jOpen || e.getSource() == jOpenCompared) {
 
             String finalFileContent = "";
             JFileChooser selectFiles = new JFileChooser();
             selectFiles.setMultiSelectionEnabled(true);
             int approveOption = selectFiles.showOpenDialog(this);
-            Random r = new Random();
-            int low = 1;
-            int high = 100;
-            int result = r.nextInt(high - low) + low;
-            path = Paths.get(folderPath + result);
+            if (e.getSource() == jOpen) {
+                Random r = new Random();
+                int low = 1;
+                int high = 100;
+                result = r.nextInt(high - low) + low;
+                folder = folderPath + result + "/V1";
+            } else {
+                folder = folderPath + result + "/V2";
+            }
+            path = Paths.get(folder);
             int count = 0;
             if (approveOption == JFileChooser.APPROVE_OPTION) {
                 try {
@@ -178,32 +208,31 @@ public class GUI extends JFrame implements ActionListener {
                         Files.copy(files[t - 1].toPath(), new File(path + "/" + newFileName + ".java").toPath());
                         example = new Example();
                         if (e.getSource() == jOpenCompared && count == 1) {
-                            System.out.print("here--------------------");
                             example.parseProg(filepath, path + "/output.txt", true, true);
-                        } else if (e.getSource() == jOpenCompared){
+                        } else if (e.getSource() == jOpenCompared) {
                             example.parseProg(filepath, path + "/output.txt", false, true);
-                        }
-                        else{
+                        } else {
                             example.parseProg(filepath, path + "/output.txt", false, false);
                         }
-
                     }
-                     System.out.println("Pre Maintenance: ");
+                    System.out.println("Pre Maintenance: ");
                     if (!premaint.isEmpty()) {
                         for (int i = 0; i < premaint.size(); i++) {
-                           
+
                             System.out.println("Classname :  " + premaint.get(i).getClassName());
                             System.out.println("Ancestor :  " + premaint.get(i).getAncestors());
                             System.out.println("Methodsss :  " + premaint.get(i).getMethodMember());
+                            System.out.println("Data Members :  " + premaint.get(i).getDataMembers());
                         }
                     }
-                      System.out.println("Post Maintenance : ");
+                    System.out.println("Post Maintenance : ");
                     if (!postmaint.isEmpty()) {
                         for (int i = 0; i < postmaint.size(); i++) {
-                          
+
                             System.out.println("Classname :  " + postmaint.get(i).getClassName());
                             System.out.println("Ancestor :  " + postmaint.get(i).getAncestors());
                             System.out.println("Methodsss :  " + postmaint.get(i).getMethodMember());
+                            System.out.println("Data Members :  " + postmaint.get(i).getDataMembers());
                         }
                     }
                 } catch (IOException e1) {
