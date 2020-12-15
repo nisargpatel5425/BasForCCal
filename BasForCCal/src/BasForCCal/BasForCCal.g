@@ -74,10 +74,7 @@ compilationUnit[String path, boolean flag, boolean isPost]
     |   {if(flag == true) finalExtraction = ""; }packageDeclaration? importDeclaration* typeDeclaration*
 
      	{
-map.put(key,methodcalls);
-m.setMethodMember(methodnamelist);
-m.setDataMembers(dataMembers);
-classmodel.put(className, m);
+
 
      	for(Map.Entry<String, List<String>> entry : map.entrySet())
      	{	
@@ -149,7 +146,12 @@ classmodel.put(className, m);
         	    }
         	    
       		writer.close();
-      		
+      		m.aggregates.addAll(aggregates);
+      		m.associates.addAll(associates);
+      		map.put(key,methodcalls);
+		m.setMethodMember(methodnamelist);
+		m.setDataMembers(dataMembers);
+		classmodel.put(className, m);
       		if(isPost){
       			postmaint.putAll(classmodel);
       			

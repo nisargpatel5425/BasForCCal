@@ -13,10 +13,29 @@ import java.util.HashMap;
  * @author kjdes
  */
 public class ModelClass {
+
     String ancestors;
     ArrayList<String> descendants;
     HashMap<String, DataMember> dataMembers;
     ArrayList<String> methodMember;
+    ArrayList<String> aggregates;
+    ArrayList<String> associates;
+
+    public ArrayList<String> getAggregates() {
+        return aggregates;
+    }
+
+    public void setAggregates(ArrayList<String> aggregates) {
+        this.aggregates = aggregates;
+    }
+
+    public ArrayList<String> getAssociates() {
+        return associates;
+    }
+
+    public void setAssociates(ArrayList<String> associates) {
+        this.associates = associates;
+    }
 
     public HashMap<String, DataMember> getDataMembers() {
         return dataMembers;
@@ -52,7 +71,8 @@ public class ModelClass {
 
 }
 
- class DataMember{
+class DataMember {
+
     String access;
     String type;
-} 
+}
