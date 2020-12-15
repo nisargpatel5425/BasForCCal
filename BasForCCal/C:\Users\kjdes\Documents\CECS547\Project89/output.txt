@@ -1,0 +1,22 @@
+
+  public  abstract Class:Base
+  implements: YYYY
+  Descendants of Base:
+  Data Members: 
+    String s 
+  Method Members: 
+ abstract   public void set() 
+  public void use() 
+  public int useINT() 
+  public float useFloat() 
+
+Method Calls:useINT
+	s
+Method Calls:set
+Method Calls:use
+	s
+Method Calls:useFloat
+	s
+ Aggregates:
+ Associates:
+ 

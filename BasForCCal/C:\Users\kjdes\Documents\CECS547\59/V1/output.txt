@@ -1,0 +1,14 @@
+
+  public Class:Derived
+  Ancestor classes: [Base]
+  implements: XXX
+  Descendants of Derived:
+  Data Members: 
+
+  Method Members: 
+  public void set() 
+
+Method Calls:set
+ Aggregates:
+ Associates:
+ 

@@ -1,0 +1,68 @@
+
+  public Class:Program
+  Descendants of Program:
+  Data Members: 
+
+  Method Members: 
+  public   static void main(    String args) 
+    Class1 c1     Class3 c3 
+  public Class:Class1
+  Descendants of Class1:[Class2]
+  Data Members: 
+  private boolean myBool   public int myInt   protected double myDouble 
+  Method Members: 
+  public Class1(boolean mb) 
+  public void myFunc1(int A,int B) 
+  public int getmyInt() 
+  public double getmyDouble() 
+  public boolean getmyBool() 
+
+  public Class:Class2
+  Ancestor classes: [Class1]
+  Descendants of Class2:
+  Data Members: 
+  private int myInt2 
+  Method Members: 
+  public int AddMine2() 
+  public Class2() 
+
+  public Class:Class3
+  Descendants of Class3:
+  Data Members: 
+    Class1 myClass1Obj   private int mynum1 , mynum2 
+  Method Members: 
+  public Class3() 
+  public void myFunc1() 
+  public void gather() 
+int W 
+Method Calls:AddMine2
+	getmyInt
+Method Calls:myFunc1
+	myClass1Obj.myFunc1	
+ 	 ->myClass1Obj.myFunc1		
+ 	 ->myClass1Obj.myFunc1
+Method Calls:getmyInt
+Method Calls:getmyBool
+Method Calls:main
+	System.out.println
+	c1.myFunc1	
+ 	 ->myClass1Obj.myFunc1
+	c1.getmyBool
+	c1.getmyInt
+	
+	c3.myFunc1	
+ 	 ->myClass1Obj.myFunc1
+	c3.gather	
+ 	 ->myClass1Obj.getmyInt	
+ 	 ->myFunc1	
+ 	 ->System.out.println
+Method Calls:gather
+	myClass1Obj.getmyInt
+	myFunc1	
+ 	 ->myClass1Obj.myFunc1
+	System.out.println
+Method Calls:getmyDouble
+ Aggregates:
+ Associates:
+Class1
+ 

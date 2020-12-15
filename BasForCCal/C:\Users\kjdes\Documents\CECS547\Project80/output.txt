@@ -1,0 +1,23 @@
+
+  public Class:ObjectAdapter
+  Ancestor classes: [Base1]
+  Descendants of ObjectAdapter:
+  Data Members: 
+    Base2 b2 
+  Method Members: 
+  public ObjectAdapter(    Base2 b) 
+  public void op1() 
+  public void op2() 
+
+Method Calls:op2
+	b2.op2	
+ 	 ->b2.op2		
+ 	 ->b2.op2
+Method Calls:op1
+	b2.op1	
+ 	 ->b2.op1
+ Aggregates:
+Base2
+ Associates:
+Base2
+ 

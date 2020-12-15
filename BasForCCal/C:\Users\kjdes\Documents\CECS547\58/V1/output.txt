@@ -1,0 +1,22 @@
+
+  public Class:Middle
+  Ancestor classes: [Base]
+  Descendants of Middle:
+  Data Members: 
+  private int Big   public float Little   private     Derived BigD 
+  Method Members: 
+  public Middle(int w) 
+  public int getx() 
+  public     Derived getD() 
+  public void setD(    Derived DDD) 
+int xxxxxxxxxxxxxxxxx 
+Method Calls:getx
+Method Calls:setD
+	SomeOp
+	a.very.lengthy.named.method
+Method Calls:getD
+ Aggregates:
+Derived
+ Associates:
+Derived
+ 

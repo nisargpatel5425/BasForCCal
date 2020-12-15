@@ -1,0 +1,15 @@
+
+  public  abstract Class:Base
+  Descendants of Base:
+  Data Members: 
+  private int a , b 
+  Method Members: 
+  public void m1(int a) 
+  public void m2(int a,float b) 
+
+Method Calls:m1
+Method Calls:m2
+	b
+ Aggregates:
+ Associates:
+ 

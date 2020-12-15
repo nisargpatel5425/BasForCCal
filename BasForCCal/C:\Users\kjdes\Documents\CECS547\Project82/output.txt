@@ -1,0 +1,48 @@
+
+  public  abstract Class:Base
+  implements: YYYY
+  Descendants of Base:[Derived]
+  Data Members: 
+    String s 
+  Method Members: 
+ abstract   public void set() 
+  public void use() 
+
+Method Calls:set
+Method Calls:use
+	s
+ Aggregates:
+ Associates:
+ 
+
+  public Class:Derived
+  Ancestor classes: [Base]
+  implements: XXX
+  Descendants of Derived:
+  Data Members: 
+
+  Method Members: 
+  public void set() 
+  public void hello() 
+
+Method Calls:set
+Method Calls:hello
+ Aggregates:
+ Associates:
+ 
+
+  public Class:IC_Tester
+  Descendants of IC_Tester:
+  Data Members: 
+  static   public int BBBBBB 
+  Method Members: 
+  public   static void main(    String args) 
+    Derived   public void bye() 
+
+Method Calls:main
+	d.use
+Method Calls:bye
+ Aggregates:
+ Associates:
+Derived
+ 

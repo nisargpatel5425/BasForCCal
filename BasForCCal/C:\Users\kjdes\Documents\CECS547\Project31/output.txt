@@ -1,0 +1,150 @@
+
+  public  abstract Class:Base
+  implements: YYYY
+  Descendants of Base:[Middle][Derived][Derived]
+  Data Members: 
+    String s 
+  Method Members: 
+ abstract   public void set() 
+  public void use() 
+  public int useINT() 
+  public float useFloat() 
+
+Method Calls:useINT
+	s
+Method Calls:set
+Method Calls:use
+	s
+Method Calls:useFloat
+	s
+ Aggregates:
+ Associates:
+ 
+
+  public Class:Derived
+  Ancestor classes: [Base]
+  implements: XXX
+  Descendants of Derived:[GrandSon]
+  Data Members: 
+
+  Method Members: 
+  public void set() 
+
+Method Calls:set
+ Aggregates:
+ Associates:
+ 
+
+  public Class:IC_Tester
+  Descendants of IC_Tester:
+  Data Members: 
+  static   public int BBBBBB 
+  Method Members: 
+  public   static void main(    String args) 
+    Derived 
+Method Calls:main
+	d.use
+ Aggregates:
+ Associates:
+Derived
+ 
+
+  public  abstract Class:Base
+  Descendants of Base:[Middle][Derived]
+  Data Members: 
+  private int a , b 
+  Method Members: 
+  public void m1() 
+  public void m2() 
+
+Method Calls:m1
+Method Calls:m2
+	b
+ Aggregates:
+ Associates:
+ 
+
+  public   static Class:Derived
+  Ancestor classes: [Base]
+  implements: Yo
+  Descendants of Derived:[GrandSon]
+  Data Members: 
+
+  Method Members: 
+  public void m1() 
+
+Method Calls:m1
+	System.out.println
+	m1	
+ 	 ->System.out.println	
+ 	 ->m1		
+ 	 ->System.out.println		
+ 	 ->m1
+ Aggregates:
+ Associates:
+ 
+
+  public Class:Middle
+  Ancestor classes: [Base]
+  Descendants of Middle:
+  Data Members: 
+  private int Big   public float Little   private     Derived BigD 
+  Method Members: 
+  public Middle(int w) 
+  public int getx() 
+  public     Derived getD() 
+  public void setD(    Derived DDD) 
+int xxxxxxxxxxxxxxxxx 
+Method Calls:getx
+Method Calls:setD
+	SomeOp
+	a.very.lengthy.named.method
+Method Calls:getD
+ Aggregates:
+Derived
+ Associates:
+Derived
+ 
+
+  public Class:GrandSon
+  Ancestor classes: [Derived, Base]
+  Descendants of GrandSon:[GreatGrandSon]
+  Data Members: 
+int x , y 
+  Method Members: 
+  public GrandSon() 
+  public void hello() 
+
+Method Calls:hello
+ Aggregates:
+ Associates:
+ 
+
+  public Class:GreatGrandSon
+  Ancestor classes: [GrandSon, Derived, Base]
+  Descendants of GreatGrandSon:
+  Data Members: 
+int x , y 
+  Method Members: 
+  public GreatGrandSon() 
+  public void hello() 
+
+Method Calls:hello
+ Aggregates:
+ Associates:
+ 
+
+  public   static   final Class:Anom_SDA
+  Descendants of Anom_SDA:
+  Data Members: 
+
+  Method Members: 
+  public   static void main(    String args) 
+    Derived d 
+Method Calls:main
+	d.m1
+	d.m2
+ Aggregates:
+ Associates:
+Derived
+ 
