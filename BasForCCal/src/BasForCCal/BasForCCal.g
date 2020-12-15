@@ -472,6 +472,7 @@ classOrInterfaceType
 			                        System.out.print( $I1.text +" ");
 			                        finalExtraction = finalExtraction + "    "+$I1.text+" "; 
 			                        datamem = $I1.text+" ";
+			                        methodName += $I1.text+" ";
 			                        isClassObject = false;
 			                       }
 		                        }
@@ -492,32 +493,32 @@ classOrInterfaceType
 primitiveType
     :   'boolean' {if(isMethodVariable){  System.out.println("Local variable: ");
 	                       finalExtraction = finalExtraction + "Local Variables:  \n"; 
-	                       isMethodVariable = false; }{System.out.print("boolean "); methodName+="boolean ";datamem+="boolean "; finalExtraction = finalExtraction + "boolean ";}}
+	                       isMethodVariable = false; }{System.out.print("boolean "); methodName+="boolean";datamem+="boolean "; finalExtraction = finalExtraction + "boolean ";}}
     |   'char' {if(isMethodVariable){  System.out.println("Local variable: ");
 	                       finalExtraction = finalExtraction + "Local Variables:  \n"; 
-	                       isMethodVariable = false;}{System.out.print("char "); methodName+="char ";datamem+="char "; finalExtraction = finalExtraction + "char ";}}
+	                       isMethodVariable = false;}{System.out.print("char "); methodName+=" char";datamem+="char "; finalExtraction = finalExtraction + "char ";}}
     |   'byte' {if(isMethodVariable){  System.out.println("Local variable: ");
 	                       finalExtraction = finalExtraction + "Local Variables:  \n"; 
-	                       isMethodVariable = false;}{System.out.print("byte "); methodName+="byte ";datamem+="byte "; finalExtraction = finalExtraction + "byte ";}}
+	                       isMethodVariable = false;}{System.out.print("byte "); methodName+=" byte";datamem+="byte "; finalExtraction = finalExtraction + "byte ";}}
     |   'short' {if(isMethodVariable){  System.out.println("Local variable: ");
 	                       finalExtraction = finalExtraction + "Local Variables:  \n"; 
-	                       isMethodVariable = false;}{System.out.print("short "); methodName+="short ";datamem+="short "; finalExtraction = finalExtraction + "short ";}}
+	                       isMethodVariable = false;}{System.out.print("short "); methodName+=" short";datamem+="short "; finalExtraction = finalExtraction + "short ";}}
     |   'int'  {if(isMethodVariable){  System.out.println("Local variable: ");
 	                       finalExtraction = finalExtraction + "Local Variables:  \n"; 
-	                       isMethodVariable = false;}{System.out.print("int "); methodName+="int ";datamem+="int "; intCount++;finalExtraction = finalExtraction + "int ";}}
+	                       isMethodVariable = false;}{System.out.print("int "); methodName+=" int";datamem+="int "; intCount++;finalExtraction = finalExtraction + "int ";}}
     |   'long' {if(isMethodVariable){  System.out.println("Local variable: ");
 	                       finalExtraction = finalExtraction + "Local Variables:  \n"; 
-	                       isMethodVariable = false;}{System.out.print("long "); methodName+="long ";datamem+="long "; finalExtraction = finalExtraction + "long ";}}
+	                       isMethodVariable = false;}{System.out.print("long "); methodName+=" long";datamem+="long "; finalExtraction = finalExtraction + "long ";}}
     |   'float' {if(isMethodVariable){  System.out.println("Local variable: ");
 	                       finalExtraction = finalExtraction + "Local Variables:  \n"; 
-	                       isMethodVariable = false;}{System.out.print("float "); methodName+="float ";datamem+="float "; finalExtraction = finalExtraction + "float ";}}
+	                       isMethodVariable = false;}{System.out.print("float "); methodName+=" float";datamem+="float "; finalExtraction = finalExtraction + "float ";}}
     |   'double' {if(isMethodVariable){  System.out.println("Local variable: ");
 	                       finalExtraction = finalExtraction + "Local Variables:  \n"; 
-	                       isMethodVariable = false;}{System.out.print("double "); methodName+="double ";datamem+="double "; finalExtraction = finalExtraction + "double ";}}
+	                       isMethodVariable = false;}{System.out .print("double "); methodName+=" double";datamem+="double "; finalExtraction = finalExtraction + "double ";}}
     ;
 
 variableModifier
-    :   'final'  {System.out.print("final "); finalExtraction = finalExtraction + "final ";}
+    :   'final'  {System.out.print("final "); methodName+=" final"; finalExtraction = finalExtraction + "final ";}
     |  Identifier annotation //{System.out.print(""+$Identifier.text);}
     ;
 
@@ -544,7 +545,7 @@ formalParameterDecls
     
 formalParameterDeclsRest
     :  Identifier variableDeclaratorId {System.out.print($Identifier.text);
-    finalExtraction = finalExtraction + $Identifier.text;}(',' {System.out.print(",");finalExtraction = finalExtraction + ",";} formalParameterDecls)?  
+    finalExtraction = finalExtraction + $Identifier.text;}(',' { methodName += ","; System.out.print(",");finalExtraction = finalExtraction + ",";} formalParameterDecls)?  
     |   '...' variableDeclaratorId
     ;
     
