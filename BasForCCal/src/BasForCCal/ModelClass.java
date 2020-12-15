@@ -15,14 +15,15 @@ import java.util.HashMap;
 public class ModelClass {
     ArrayList<String> ancestors;
     ArrayList<String> descendants;
-    ArrayList<String> dataMembers;
+    ArrayList<DataMember> dataMembers;
     ArrayList<String> methodMember;
 
-    public ArrayList<String> getDataMembers() {
+    public ArrayList<DataMember> getDataMembers() {
         return dataMembers;
     }
+    
 
-    public void setDataMembers(ArrayList<String> dataMembers) {
+    public void setDataMembers(ArrayList<DataMember> dataMembers) {
         this.dataMembers = dataMembers;
     }
 
@@ -49,4 +50,11 @@ public class ModelClass {
     public void setMethodMember(ArrayList<String> methodMember) {
         this.methodMember = methodMember;
     }
+
 }
+
+ class DataMember{
+    String access;
+    String type;
+    String name;
+} 

@@ -24,14 +24,15 @@ boolean variableDeclare=false;
 boolean isMethodVariable=false;
 ArrayList<String> aggregates = new ArrayList<String>();
 ArrayList<String> associates = new ArrayList<String>();
-ArrayList<String> dataMembers = new ArrayList<String>();
-String datamem = "",className="";
+ArrayList<DataMember> dataMembers = new ArrayList<DataMember>();
+String className="";
 static HashMap<String, ModelClass> premaint = new HashMap<>();
 static HashMap<String, ModelClass> postmaint = new HashMap<>();
 HashMap<String, ModelClass> classmodel = new HashMap<String, ModelClass>();
 ArrayList<String> methodnamelist = new ArrayList<>();
-String methodName = "";
+String methodName = "", datamem="";
 ModelClass m;
+DataMember dm ;
 
 public void printData(List<String> str, String tabs)
      	{
@@ -201,7 +202,7 @@ normalClassDeclaration
     :   'class' Identifier {System.out.print("Class:"+$Identifier.text); 
     			finalExtraction = finalExtraction + ("Class:"+$Identifier.text);
     			isMethodMember=false; isDataMember=false;isMethodVariable=false;isClassObject = false;
-    			m = new ModelClass();
+    			m = new ModelClass(); dm = new DataMember();
     			className = $Identifier.text;} typeParameters?
         ('extends' {isExtends=true; descendants = new ArrayList<>(); ancestors = new ArrayList<>();
         descendantname = $Identifier.text; ancestorkey = $Identifier.text;} type)?
@@ -373,7 +374,7 @@ variableDeclarators
 
 variableDeclarator
     :   Identifier {isClassObject= false;System.out.print($Identifier.text+"\n");finalExtraction = finalExtraction + ($Identifier.text+" " );
-    datamem = datamem + $Identifier.text;dataMembers.add(datamem); datamem="";} variableDeclaratorId ('=' variableInitializer)?
+    dm.name= $Identifier.text;dataMembers.add(dm); dm= new DataMember(); } variableDeclaratorId ('=' variableInitializer)?
     ;
     
 constantDeclaratorsRest
@@ -473,7 +474,7 @@ classOrInterfaceType
 			                        System.out.print( $I1.text +" ");
 			                        finalExtraction = finalExtraction + "    "+$I1.text+" "; 
 			                        methodName += $I1.text;
-			                        datamem = $I1.text+" ";
+			                        dm.type = $I1.text;
 			                        isClassObject = false;
 			                       }
 		                        }
@@ -494,32 +495,32 @@ classOrInterfaceType
 primitiveType
     :   'boolean' {if(isMethodVariable){  System.out.println("Local variable: ");
 	                       finalExtraction = finalExtraction + "Local Variables:  \n"; 
-	                       isMethodVariable = false; }{System.out.print("boolean "); methodName+="boolean ";datamem+="boolean "; finalExtraction = finalExtraction + "boolean ";}}
+	                       isMethodVariable = false; }{System.out.print("boolean "); methodName+="boolean ";dm.type="boolean "; finalExtraction = finalExtraction + "boolean ";}}
     |   'char' {if(isMethodVariable){  System.out.println("Local variable: ");
 	                       finalExtraction = finalExtraction + "Local Variables:  \n"; 
-	                       isMethodVariable = false;}{System.out.print("char "); methodName+="char ";datamem+="char "; finalExtraction = finalExtraction + "char ";}}
+	                       isMethodVariable = false;}{System.out.print("char "); methodName+="char ";dm.type="char "; finalExtraction = finalExtraction + "char ";}}
     |   'byte' {if(isMethodVariable){  System.out.println("Local variable: ");
 	                       finalExtraction = finalExtraction + "Local Variables:  \n"; 
-	                       isMethodVariable = false;}{System.out.print("byte "); methodName+="byte ";datamem+="byte "; finalExtraction = finalExtraction + "byte ";}}
+	                       isMethodVariable = false;}{System.out.print("byte "); methodName+="byte ";dm.type="byte "; finalExtraction = finalExtraction + "byte ";}}
     |   'short' {if(isMethodVariable){  System.out.println("Local variable: ");
 	                       finalExtraction = finalExtraction + "Local Variables:  \n"; 
-	                       isMethodVariable = false;}{System.out.print("short "); methodName+="short ";datamem+="short "; finalExtraction = finalExtraction + "short ";}}
+	                       isMethodVariable = false;}{System.out.print("short "); methodName+="short ";dm.type="short "; finalExtraction = finalExtraction + "short ";}}
     |   'int'  {if(isMethodVariable){  System.out.println("Local variable: ");
 	                       finalExtraction = finalExtraction + "Local Variables:  \n"; 
-	                       isMethodVariable = false;}{System.out.print("int "); methodName+="int ";datamem+="int "; intCount++;finalExtraction = finalExtraction + "int ";}}
+	                       isMethodVariable = false;}{System.out.print("int "); methodName+="int ";dm.type="int "; intCount++;finalExtraction = finalExtraction + "int ";}}
     |   'long' {if(isMethodVariable){  System.out.println("Local variable: ");
 	                       finalExtraction = finalExtraction + "Local Variables:  \n"; 
-	                       isMethodVariable = false;}{System.out.print("long "); methodName+="long ";datamem+="long "; finalExtraction = finalExtraction + "long ";}}
+	                       isMethodVariable = false;}{System.out.print("long "); methodName+="long ";dm.type="long "; finalExtraction = finalExtraction + "long ";}}
     |   'float' {if(isMethodVariable){  System.out.println("Local variable: ");
 	                       finalExtraction = finalExtraction + "Local Variables:  \n"; 
-	                       isMethodVariable = false;}{System.out.print("float "); methodName+="float ";datamem+="float "; finalExtraction = finalExtraction + "float ";}}
+	                       isMethodVariable = false;}{System.out.print("float "); methodName+="float ";dm.type="float "; finalExtraction = finalExtraction + "float ";}}
     |   'double' {if(isMethodVariable){  System.out.println("Local variable: ");
 	                       finalExtraction = finalExtraction + "Local Variables:  \n"; 
 	                       isMethodVariable = false;}{System.out.print("double "); methodName+="double ";datamem+="double "; finalExtraction = finalExtraction + "double ";}}
     ;
 
 variableModifier
-    :   'final'  {System.out.print("final "); methodName += "final "; datamem += "final "; finalExtraction = finalExtraction + "final ";}
+    :   'final'  {System.out.print("final "); methodName += "final "; dm.type= "final "; finalExtraction = finalExtraction + "final ";}
     |  Identifier annotation //{System.out.print(""+$Identifier.text);}
     ;
 

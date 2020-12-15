@@ -268,12 +268,17 @@ public class GUI extends JFrame implements ActionListener {
 
     private void compareMaintenance(HashMap<String, ModelClass> premaint, HashMap<String, ModelClass> postmaint) {
         compareClass(premaint, postmaint);
+          for (Map.Entry<String, ModelClass> entry : premaint.entrySet()) {
+              for (int i = 0; i < entry.getValue().dataMembers.size(); i++) {
+                  System.out.print(entry.getValue().dataMembers.get(i).type);
+              }
+             
+        }
+       
     }
 
     private void compareClass(HashMap<String, ModelClass> premaint, HashMap<String, ModelClass> postmaint) {
-        if (premaint.size() == postmaint.size()) {
-            System.out.println("No change in classname");
-        } else if (premaint.size() > postmaint.size()) {
+        if (premaint.size() > postmaint.size()) {
             for (Map.Entry<String, ModelClass> entry : premaint.entrySet()) {
 
                 if (!postmaint.containsKey(entry.getKey())) {
@@ -281,8 +286,7 @@ public class GUI extends JFrame implements ActionListener {
                 }
 
             }
-        }
-        else if (premaint.size() < postmaint.size()) {
+        } else if (premaint.size() < postmaint.size()) {
             for (Map.Entry<String, ModelClass> entry : postmaint.entrySet()) {
 
                 if (!premaint.containsKey(entry.getKey())) {
