@@ -220,7 +220,7 @@ public class GUI extends JFrame implements ActionListener {
                     }
 
                     if (!postmaint.isEmpty()) {
-                        compareMaintenance(premaint, postmaint);
+                        compareClass(premaint, postmaint);
 
                     }
                 } catch (IOException e1) {
@@ -247,11 +247,6 @@ public class GUI extends JFrame implements ActionListener {
                 ex.printStackTrace();
             }
         }
-    }
-
-    private void compareMaintenance(HashMap<String, ModelClass> premaint, HashMap<String, ModelClass> postmaint) {
-        compareClass(premaint, postmaint);
-
     }
 
     private void compareClass(HashMap<String, ModelClass> premaint, HashMap<String, ModelClass> postmaint) {
