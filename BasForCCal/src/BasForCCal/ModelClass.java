@@ -13,7 +13,7 @@ import java.util.HashMap;
  * @author kjdes
  */
 public class ModelClass {
-    ArrayList<String> ancestors;
+    String ancestors;
     ArrayList<String> descendants;
     HashMap<String, DataMember> dataMembers;
     ArrayList<String> methodMember;
@@ -34,11 +34,11 @@ public class ModelClass {
         this.descendants = descendants;
     }
 
-    public ArrayList<String> getAncestors() {
+    public String getAncestors() {
         return ancestors;
     }
 
-    public void setAncestors(ArrayList<String> ancestors) {
+    public void setAncestors(String ancestors) {
         this.ancestors = ancestors;
     }
 

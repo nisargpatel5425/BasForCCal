@@ -442,7 +442,7 @@ classOrInterfaceType
 	                       	}else{
 	                       		ancestormap.put(ancestorkey,ancestors);
 	                       	}
-	                       	m.setAncestors(ancestors);
+	                       	m.setAncestors($I1.text);
 	                       	
 	                     
 	                       	System.out.println("Ancestor classes:  "+ ancestors); 

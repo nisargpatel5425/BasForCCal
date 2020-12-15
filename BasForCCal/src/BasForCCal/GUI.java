@@ -220,15 +220,6 @@ public class GUI extends JFrame implements ActionListener {
                     }
 
                     if (!postmaint.isEmpty()) {
-//                        for (Map.Entry<String, ModelClass> entry1 : postmaint.entrySet()) {
-//                            for (Map.Entry<String, DataMember> entry : entry1.getValue().dataMembers.entrySet()) {
-//                                System.out.println("newwwwwwwwwwwwww");
-//                                System.out.print(entry.getValue().access);
-//                                System.out.print(entry.getValue().type);
-//                                System.out.print(entry.getKey());
-//                                System.out.println("");
-//                            }
-//                        }
                         compareMaintenance(premaint, postmaint);
 
                     }
@@ -271,6 +262,7 @@ public class GUI extends JFrame implements ActionListener {
                     System.out.println("Class Removed: " + entry.getKey());
                 } else {
                     compareDataMembers(entry.getValue(), postmaint.get(entry.getKey()));
+                    compareAncestor(entry.getValue().ancestors, postmaint.get(entry.getKey()).ancestors,entry.getKey());
                 }
 
             }
@@ -281,13 +273,14 @@ public class GUI extends JFrame implements ActionListener {
                     System.out.println("Class Added: " + entry.getKey());
                 } else {
                     compareDataMembers(premaint.get(entry.getKey()), entry.getValue());
+                    compareAncestor(entry.getValue().ancestors, postmaint.get(entry.getKey()).ancestors,entry.getKey());
                 }
             }
         } else {
             for (Map.Entry<String, ModelClass> entry : premaint.entrySet()) {
 
                 compareDataMembers(entry.getValue(), postmaint.get(entry.getKey()));
-
+                compareAncestor(entry.getValue().ancestors, postmaint.get(entry.getKey()).ancestors,entry.getKey());
             }
         }
     }
@@ -338,6 +331,12 @@ public class GUI extends JFrame implements ActionListener {
                     System.out.println(entry.getValue().access + " " + entry.getValue().type + " " + entry.getKey());
                 }
             }
+        }
+    }
+
+    private void compareAncestor(String preancestor, String postancestor, String classname) {
+        if(!preancestor.equalsIgnoreCase(postancestor)){
+            System.out.println("Ancestor changed from "+ preancestor+" to "+ postancestor+" for "+ classname);
         }
     }
 
