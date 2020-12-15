@@ -23,6 +23,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -235,6 +236,8 @@ public class GUI extends JFrame implements ActionListener {
                             System.out.println("Data Members :  " + postmaint.get(i).getDataMembers());
                         }
                     }
+                    
+                    compareMaintenance(premaint,postmaint);
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 } catch (RecognitionException e1) {
@@ -260,4 +263,15 @@ public class GUI extends JFrame implements ActionListener {
             }
         }
     }
-}
+
+    public void compareMaintenance(ArrayList<ModelClass> premaint, ArrayList<ModelClass> postmaint) {
+        compareClassname(premaint, postmaint);
+      //  compareAncestor(premaint,postmaint);
+     //   compareDataMembers(premaint,postmaint);
+    }
+
+    public void compareClassname(ArrayList<ModelClass> premaint, ArrayList<ModelClass> postmaint) {
+        if(premaint.size() == postmaint.size()){
+            
+        }
+    }

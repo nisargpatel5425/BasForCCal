@@ -15,7 +15,6 @@ import java.util.HashMap;
 public class ModelClass {
     ArrayList<String> ancestors;
     ArrayList<String> descendants;
-    String className;
     ArrayList<String> dataMembers;
     ArrayList<String> methodMember;
 
@@ -34,15 +33,6 @@ public class ModelClass {
     public void setDescendants(ArrayList<String> descendants) {
         this.descendants = descendants;
     }
-
-    public String getClassName() {
-        return className;
-    }
-
-    public void setClassName(String className) {
-        this.className = className;
-    }
-
 
     public ArrayList<String> getAncestors() {
         return ancestors;

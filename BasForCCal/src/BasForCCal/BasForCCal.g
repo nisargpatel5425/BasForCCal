@@ -25,10 +25,10 @@ boolean isMethodVariable=false;
 ArrayList<String> aggregates = new ArrayList<String>();
 ArrayList<String> associates = new ArrayList<String>();
 ArrayList<String> dataMembers = new ArrayList<String>();
-String datamem = "";
-static ArrayList<ModelClass> premaint = new ArrayList<ModelClass>();
-static ArrayList<ModelClass> postmaint = new ArrayList<ModelClass>();
-ArrayList<ModelClass> classmodel = new ArrayList<ModelClass>();
+String datamem = "",className="";
+static HashMap<String, ModelClass> premaint = new HashMap<>();
+static HashMap<String, ModelClass> postmaint = new HashMap<>();
+HashMap<String, ModelClass> classmodel = new HashMap<String, ModelClass>();
 ArrayList<String> methodnamelist = new ArrayList<>();
 String methodName = "";
 ModelClass m;
@@ -76,7 +76,8 @@ compilationUnit[String path, boolean flag, boolean isPost]
 map.put(key,methodcalls);
 m.setMethodMember(methodnamelist);
 m.setDataMembers(dataMembers);
-classmodel.add(m);
+classmodel.put(classname, m);
+
      	for(Map.Entry<String, List<String>> entry : map.entrySet())
      	{	
      		System.out.println("Method Calls:"+entry.getKey());
@@ -149,10 +150,10 @@ classmodel.add(m);
       		writer.close();
       		
       		if(isPost){
-      			postmaint.addAll(classmodel);
-      			System.out.println("hiii"+postmaint.get(0).getClassName());
+      			postmaint.putAll(classmodel);
+      			
       		}else{
-      			premaint.addAll(classmodel);
+      			premaint.putAll(classmodel);
       		}
       		}catch(Exception ex){}}; 
 packageDeclaration
@@ -201,7 +202,7 @@ normalClassDeclaration
     			finalExtraction = finalExtraction + ("Class:"+$Identifier.text);
     			isMethodMember=false; isDataMember=false;isMethodVariable=false;isClassObject = false;
     			m = new ModelClass();
-    			m.className = $Identifier.text;} typeParameters?
+    			className = $Identifier.text;} typeParameters?
         ('extends' {isExtends=true; descendants = new ArrayList<>(); ancestors = new ArrayList<>();
         descendantname = $Identifier.text; ancestorkey = $Identifier.text;} type)?
         ('implements'{isImp= true;} typeList)?
@@ -471,6 +472,7 @@ classOrInterfaceType
 						
 			                        System.out.print( $I1.text +" ");
 			                        finalExtraction = finalExtraction + "    "+$I1.text+" "; 
+			                        methodName += $I1.text;
 			                        datamem = $I1.text+" ";
 			                        isClassObject = false;
 			                       }
@@ -517,7 +519,7 @@ primitiveType
     ;
 
 variableModifier
-    :   'final'  {System.out.print("final "); finalExtraction = finalExtraction + "final ";}
+    :   'final'  {System.out.print("final "); methodName += "final "; datamem += "final "; finalExtraction = finalExtraction + "final ";}
     |  Identifier annotation //{System.out.print(""+$Identifier.text);}
     ;
 
