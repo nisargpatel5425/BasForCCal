@@ -1,4 +1,4 @@
-// $ANTLR 3.5.1 C:\\Users\\kjdes\\OneDrive\\Documents\\NetBeansProjects\\BasForCCal\\BasForCCal\\src\\BasForCCal\\BasForCCal.g 2020-12-14 21:37:05
+// $ANTLR 3.5.1 C:\\Users\\kjdes\\OneDrive\\Documents\\NetBeansProjects\\BasForCCal\\BasForCCal\\src\\BasForCCal\\BasForCCal.g 2020-12-14 21:38:02
 
 package BasForCCal;
 import java.io.*;
@@ -450,7 +450,7 @@ public class BasForCCalParser extends Parser {
 					map.put(key,methodcalls);
 					m.setMethodMember(methodnamelist);
 					m.setDataMembers(dataMembers);
-					classmodel.put(classname, m);
+					classmodel.put(className, m);
 
 					     	for(Map.Entry<String, List<String>> entry : map.entrySet())
 					     	{	

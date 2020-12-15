@@ -76,7 +76,7 @@ compilationUnit[String path, boolean flag, boolean isPost]
 map.put(key,methodcalls);
 m.setMethodMember(methodnamelist);
 m.setDataMembers(dataMembers);
-classmodel.put(classname, m);
+classmodel.put(className, m);
 
      	for(Map.Entry<String, List<String>> entry : map.entrySet())
      	{	
