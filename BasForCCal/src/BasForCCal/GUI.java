@@ -218,28 +218,20 @@ public class GUI extends JFrame implements ActionListener {
                             example.parseProg(filepath, path + "/output.txt", false, false);
                         }
                     }
-//                    System.out.println("Pre Maintenance: ");
-//                    if (!premaint.isEmpty()) {
-//                        for (int i = 0; i < premaint.size(); i++) {
-//
-//                            // System.out.println("Classname :  " + premaint.get(i).getClassName());
-//                            System.out.println("Ancestor :  " + premaint.get(i).getAncestors());
-//                            System.out.println("Methodsss :  " + premaint.get(i).getMethodMember());
-//                            System.out.println("Data Members :  " + premaint.get(i).getDataMembers());
-//                        }
-//                    }
-//                    System.out.println("Post Maintenance : ");
-//                    if (!postmaint.isEmpty()) {
-//                        for (int i = 0; i < postmaint.size(); i++) {
-//
-//                            //   System.out.println("Classname :  " + postmaint.get(i).getClassName());
-//                            System.out.println("Ancestor :  " + postmaint.get(i).getAncestors());
-//                            System.out.println("Methodsss :  " + postmaint.get(i).getMethodMember());
-//                            System.out.println("Data Members :  " + postmaint.get(i).getDataMembers());
-//                        }
-//                    }
 
-                    compareMaintenance(premaint, postmaint);
+                    if (!postmaint.isEmpty()) {
+//                        for (Map.Entry<String, ModelClass> entry1 : postmaint.entrySet()) {
+//                            for (Map.Entry<String, DataMember> entry : entry1.getValue().dataMembers.entrySet()) {
+//                                System.out.println("newwwwwwwwwwwwww");
+//                                System.out.print(entry.getValue().access);
+//                                System.out.print(entry.getValue().type);
+//                                System.out.print(entry.getKey());
+//                                System.out.println("");
+//                            }
+//                        }
+                        compareMaintenance(premaint, postmaint);
+
+                    }
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 } catch (RecognitionException e1) {
@@ -268,13 +260,7 @@ public class GUI extends JFrame implements ActionListener {
 
     private void compareMaintenance(HashMap<String, ModelClass> premaint, HashMap<String, ModelClass> postmaint) {
         compareClass(premaint, postmaint);
-          for (Map.Entry<String, ModelClass> entry : premaint.entrySet()) {
-              for (int i = 0; i < entry.getValue().dataMembers.size(); i++) {
-                  System.out.print(entry.getValue().dataMembers.get(i).type);
-              }
-             
-        }
-       
+
     }
 
     private void compareClass(HashMap<String, ModelClass> premaint, HashMap<String, ModelClass> postmaint) {
@@ -283,6 +269,8 @@ public class GUI extends JFrame implements ActionListener {
 
                 if (!postmaint.containsKey(entry.getKey())) {
                     System.out.println("Class Removed: " + entry.getKey());
+                } else {
+                    compareDataMembers(entry.getValue(), postmaint.get(entry.getKey()));
                 }
 
             }
@@ -291,8 +279,64 @@ public class GUI extends JFrame implements ActionListener {
 
                 if (!premaint.containsKey(entry.getKey())) {
                     System.out.println("Class Added: " + entry.getKey());
+                } else {
+                    compareDataMembers(premaint.get(entry.getKey()), entry.getValue());
                 }
+            }
+        } else {
+            for (Map.Entry<String, ModelClass> entry : premaint.entrySet()) {
 
+                compareDataMembers(entry.getValue(), postmaint.get(entry.getKey()));
+
+            }
+        }
+    }
+
+    private void compareDataMembers(ModelClass pre, ModelClass post) {
+        if (pre.dataMembers.size() > post.dataMembers.size()) {
+            for (Map.Entry<String, DataMember> entry : pre.dataMembers.entrySet()) {
+                if (post.dataMembers.containsKey(entry.getKey())) {
+                    if (post.dataMembers.get(entry.getKey()).access != null) {
+                        if (!post.dataMembers.get(entry.getKey()).access
+                                .equalsIgnoreCase(entry.getValue().access)) {
+                            System.out.println("Access modifier changed for " + entry.getKey() + ":");
+                            System.out.println(entry.getValue().access + " " + entry.getValue().type + " " + entry.getKey());
+
+                        }
+                    }
+                    if (post.dataMembers.get(entry.getKey()).type != null) {
+                        if (!post.dataMembers.get(entry.getKey()).type
+                                .equalsIgnoreCase(entry.getValue().type)) {
+                            System.out.println("Type changed for " + entry.getKey() + ":");
+                            System.out.println(entry.getValue().access + " " + entry.getValue().type + " " + entry.getKey());
+                        }
+                    }
+                } else {
+                    System.out.println("Data Member removed:");
+                    System.out.println(entry.getValue().access + " " + entry.getValue().type + " " + entry.getKey());
+                }
+            }
+        } else if (pre.dataMembers.size() < post.dataMembers.size()) {
+            for (Map.Entry<String, DataMember> entry : post.dataMembers.entrySet()) {
+                if (pre.dataMembers.containsKey(entry.getKey())) {
+                    if (pre.dataMembers.get(entry.getKey()).access != null) {
+                        if (!pre.dataMembers.get(entry.getKey()).access
+                                .equalsIgnoreCase(entry.getValue().access)) {
+                            System.out.println("Access modifier changed for " + entry.getKey() + ":");
+                            System.out.println(entry.getValue().access + " " + entry.getValue().type + " " + entry.getKey());
+                        }
+                    }
+                    if (pre.dataMembers.get(entry.getKey()).type != null) {
+                        if (!pre.dataMembers.get(entry.getKey()).type
+                                .equalsIgnoreCase(entry.getValue().type)) {
+                            System.out.println("Type changed for " + entry.getKey() + ":");
+                            System.out.println(entry.getValue().access + " " + entry.getValue().type + " " + entry.getKey());
+                        }
+                    }
+                } else {
+                    System.out.println("New Data Member added:");
+                    System.out.println(entry.getValue().access + " " + entry.getValue().type + " " + entry.getKey());
+                }
             }
         }
     }
