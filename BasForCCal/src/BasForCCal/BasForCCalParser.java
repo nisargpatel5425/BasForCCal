@@ -1,4 +1,4 @@
-// $ANTLR 3.5.1 C:\\Users\\kjdes\\OneDrive\\Documents\\NetBeansProjects\\BasForCCal\\BasForCCal\\src\\BasForCCal\\BasForCCal.g 2020-12-14 21:38:02
+// $ANTLR 3.5.1 C:\\Users\\kjdes\\OneDrive\\Documents\\NetBeansProjects\\BasForCCal\\BasForCCal\\src\\BasForCCal\\BasForCCal.g 2020-12-14 21:53:10
 
 package BasForCCal;
 import java.io.*;
@@ -9413,7 +9413,7 @@ public class BasForCCalParser extends Parser {
 					          t2.getLine() == t3.getLine() && 
 					          t2.getCharPositionInLine() + 1 == t3.getCharPositionInLine() )) ) {
 						if (state.backtracking>0) {state.failed=true; return;}
-						throw new FailedPredicateException(input, "assignmentOperator", " $t1.getLine() == $t2.getLine() &&\r\n          $t1.getCharPositionInLine() + 1 == $t2.getCharPositionInLine() && \r\n          $t2.getLine() == $t3.getLine() && \r\n          $t2.getCharPositionInLine() + 1 == $t3.getCharPositionInLine() ");
+						throw new FailedPredicateException(input, "assignmentOperator", " $t1.getLine() == $t2.getLine() &&\n          $t1.getCharPositionInLine() + 1 == $t2.getCharPositionInLine() && \n          $t2.getLine() == $t3.getLine() && \n          $t2.getCharPositionInLine() + 1 == $t3.getCharPositionInLine() ");
 					}
 					}
 					break;
@@ -9431,7 +9431,7 @@ public class BasForCCalParser extends Parser {
 					          t3.getLine() == t4.getLine() && 
 					          t3.getCharPositionInLine() + 1 == t4.getCharPositionInLine() )) ) {
 						if (state.backtracking>0) {state.failed=true; return;}
-						throw new FailedPredicateException(input, "assignmentOperator", " $t1.getLine() == $t2.getLine() && \r\n          $t1.getCharPositionInLine() + 1 == $t2.getCharPositionInLine() &&\r\n          $t2.getLine() == $t3.getLine() && \r\n          $t2.getCharPositionInLine() + 1 == $t3.getCharPositionInLine() &&\r\n          $t3.getLine() == $t4.getLine() && \r\n          $t3.getCharPositionInLine() + 1 == $t4.getCharPositionInLine() ");
+						throw new FailedPredicateException(input, "assignmentOperator", " $t1.getLine() == $t2.getLine() && \n          $t1.getCharPositionInLine() + 1 == $t2.getCharPositionInLine() &&\n          $t2.getLine() == $t3.getLine() && \n          $t2.getCharPositionInLine() + 1 == $t3.getCharPositionInLine() &&\n          $t3.getLine() == $t4.getLine() && \n          $t3.getCharPositionInLine() + 1 == $t4.getCharPositionInLine() ");
 					}
 					}
 					break;
@@ -9446,7 +9446,7 @@ public class BasForCCalParser extends Parser {
 					          t2.getLine() == t3.getLine() && 
 					          t2.getCharPositionInLine() + 1 == t3.getCharPositionInLine() )) ) {
 						if (state.backtracking>0) {state.failed=true; return;}
-						throw new FailedPredicateException(input, "assignmentOperator", " $t1.getLine() == $t2.getLine() && \r\n          $t1.getCharPositionInLine() + 1 == $t2.getCharPositionInLine() && \r\n          $t2.getLine() == $t3.getLine() && \r\n          $t2.getCharPositionInLine() + 1 == $t3.getCharPositionInLine() ");
+						throw new FailedPredicateException(input, "assignmentOperator", " $t1.getLine() == $t2.getLine() && \n          $t1.getCharPositionInLine() + 1 == $t2.getCharPositionInLine() && \n          $t2.getLine() == $t3.getLine() && \n          $t2.getCharPositionInLine() + 1 == $t3.getCharPositionInLine() ");
 					}
 					}
 					break;
@@ -10082,7 +10082,7 @@ public class BasForCCalParser extends Parser {
 					if ( !(( t1.getLine() == t2.getLine() && 
 					          t1.getCharPositionInLine() + 1 == t2.getCharPositionInLine() )) ) {
 						if (state.backtracking>0) {state.failed=true; return;}
-						throw new FailedPredicateException(input, "relationalOp", " $t1.getLine() == $t2.getLine() && \r\n          $t1.getCharPositionInLine() + 1 == $t2.getCharPositionInLine() ");
+						throw new FailedPredicateException(input, "relationalOp", " $t1.getLine() == $t2.getLine() && \n          $t1.getCharPositionInLine() + 1 == $t2.getCharPositionInLine() ");
 					}
 					}
 					break;
@@ -10094,7 +10094,7 @@ public class BasForCCalParser extends Parser {
 					if ( !(( t1.getLine() == t2.getLine() && 
 					          t1.getCharPositionInLine() + 1 == t2.getCharPositionInLine() )) ) {
 						if (state.backtracking>0) {state.failed=true; return;}
-						throw new FailedPredicateException(input, "relationalOp", " $t1.getLine() == $t2.getLine() && \r\n          $t1.getCharPositionInLine() + 1 == $t2.getCharPositionInLine() ");
+						throw new FailedPredicateException(input, "relationalOp", " $t1.getLine() == $t2.getLine() && \n          $t1.getCharPositionInLine() + 1 == $t2.getCharPositionInLine() ");
 					}
 					}
 					break;
@@ -10351,7 +10351,7 @@ public class BasForCCalParser extends Parser {
 					if ( !(( t1.getLine() == t2.getLine() && 
 					          t1.getCharPositionInLine() + 1 == t2.getCharPositionInLine() )) ) {
 						if (state.backtracking>0) {state.failed=true; return;}
-						throw new FailedPredicateException(input, "shiftOp", " $t1.getLine() == $t2.getLine() && \r\n          $t1.getCharPositionInLine() + 1 == $t2.getCharPositionInLine() ");
+						throw new FailedPredicateException(input, "shiftOp", " $t1.getLine() == $t2.getLine() && \n          $t1.getCharPositionInLine() + 1 == $t2.getCharPositionInLine() ");
 					}
 					}
 					break;
@@ -10366,7 +10366,7 @@ public class BasForCCalParser extends Parser {
 					          t2.getLine() == t3.getLine() && 
 					          t2.getCharPositionInLine() + 1 == t3.getCharPositionInLine() )) ) {
 						if (state.backtracking>0) {state.failed=true; return;}
-						throw new FailedPredicateException(input, "shiftOp", " $t1.getLine() == $t2.getLine() && \r\n          $t1.getCharPositionInLine() + 1 == $t2.getCharPositionInLine() &&\r\n          $t2.getLine() == $t3.getLine() && \r\n          $t2.getCharPositionInLine() + 1 == $t3.getCharPositionInLine() ");
+						throw new FailedPredicateException(input, "shiftOp", " $t1.getLine() == $t2.getLine() && \n          $t1.getCharPositionInLine() + 1 == $t2.getCharPositionInLine() &&\n          $t2.getLine() == $t3.getLine() && \n          $t2.getCharPositionInLine() + 1 == $t3.getCharPositionInLine() ");
 					}
 					}
 					break;
@@ -10378,7 +10378,7 @@ public class BasForCCalParser extends Parser {
 					if ( !(( t1.getLine() == t2.getLine() && 
 					          t1.getCharPositionInLine() + 1 == t2.getCharPositionInLine() )) ) {
 						if (state.backtracking>0) {state.failed=true; return;}
-						throw new FailedPredicateException(input, "shiftOp", " $t1.getLine() == $t2.getLine() && \r\n          $t1.getCharPositionInLine() + 1 == $t2.getCharPositionInLine() ");
+						throw new FailedPredicateException(input, "shiftOp", " $t1.getLine() == $t2.getLine() && \n          $t1.getCharPositionInLine() + 1 == $t2.getCharPositionInLine() ");
 					}
 					}
 					break;

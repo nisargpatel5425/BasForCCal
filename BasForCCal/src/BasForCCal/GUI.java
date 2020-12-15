@@ -24,6 +24,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -216,28 +218,28 @@ public class GUI extends JFrame implements ActionListener {
                             example.parseProg(filepath, path + "/output.txt", false, false);
                         }
                     }
-                    System.out.println("Pre Maintenance: ");
-                    if (!premaint.isEmpty()) {
-                        for (int i = 0; i < premaint.size(); i++) {
+//                    System.out.println("Pre Maintenance: ");
+//                    if (!premaint.isEmpty()) {
+//                        for (int i = 0; i < premaint.size(); i++) {
+//
+//                            // System.out.println("Classname :  " + premaint.get(i).getClassName());
+//                            System.out.println("Ancestor :  " + premaint.get(i).getAncestors());
+//                            System.out.println("Methodsss :  " + premaint.get(i).getMethodMember());
+//                            System.out.println("Data Members :  " + premaint.get(i).getDataMembers());
+//                        }
+//                    }
+//                    System.out.println("Post Maintenance : ");
+//                    if (!postmaint.isEmpty()) {
+//                        for (int i = 0; i < postmaint.size(); i++) {
+//
+//                            //   System.out.println("Classname :  " + postmaint.get(i).getClassName());
+//                            System.out.println("Ancestor :  " + postmaint.get(i).getAncestors());
+//                            System.out.println("Methodsss :  " + postmaint.get(i).getMethodMember());
+//                            System.out.println("Data Members :  " + postmaint.get(i).getDataMembers());
+//                        }
+//                    }
 
-                            System.out.println("Classname :  " + premaint.get(i).getClassName());
-                            System.out.println("Ancestor :  " + premaint.get(i).getAncestors());
-                            System.out.println("Methodsss :  " + premaint.get(i).getMethodMember());
-                            System.out.println("Data Members :  " + premaint.get(i).getDataMembers());
-                        }
-                    }
-                    System.out.println("Post Maintenance : ");
-                    if (!postmaint.isEmpty()) {
-                        for (int i = 0; i < postmaint.size(); i++) {
-
-                            System.out.println("Classname :  " + postmaint.get(i).getClassName());
-                            System.out.println("Ancestor :  " + postmaint.get(i).getAncestors());
-                            System.out.println("Methodsss :  " + postmaint.get(i).getMethodMember());
-                            System.out.println("Data Members :  " + postmaint.get(i).getDataMembers());
-                        }
-                    }
-                    
-                    compareMaintenance(premaint,postmaint);
+                    compareMaintenance(premaint, postmaint);
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 } catch (RecognitionException e1) {
@@ -264,14 +266,31 @@ public class GUI extends JFrame implements ActionListener {
         }
     }
 
-    public void compareMaintenance(ArrayList<ModelClass> premaint, ArrayList<ModelClass> postmaint) {
-        compareClassname(premaint, postmaint);
-      //  compareAncestor(premaint,postmaint);
-     //   compareDataMembers(premaint,postmaint);
+    private void compareMaintenance(HashMap<String, ModelClass> premaint, HashMap<String, ModelClass> postmaint) {
+        compareClass(premaint, postmaint);
     }
 
-    public void compareClassname(ArrayList<ModelClass> premaint, ArrayList<ModelClass> postmaint) {
-        if(premaint.size() == postmaint.size()){
-            
+    private void compareClass(HashMap<String, ModelClass> premaint, HashMap<String, ModelClass> postmaint) {
+        if (premaint.size() == postmaint.size()) {
+            System.out.println("No change in classname");
+        } else if (premaint.size() > postmaint.size()) {
+            for (Map.Entry<String, ModelClass> entry : premaint.entrySet()) {
+
+                if (!postmaint.containsKey(entry.getKey())) {
+                    System.out.println("Class Removed: " + entry.getKey());
+                }
+
+            }
+        }
+        else if (premaint.size() < postmaint.size()) {
+            for (Map.Entry<String, ModelClass> entry : postmaint.entrySet()) {
+
+                if (!premaint.containsKey(entry.getKey())) {
+                    System.out.println("Class Added: " + entry.getKey());
+                }
+
+            }
         }
     }
+
+}
